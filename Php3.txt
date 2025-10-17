@@ -1,0 +1,1060 @@
+---------(Slip 1)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$orig = isset($_POST["s"])?$_POST["s"]:"";
+$rev = "";
+if($_SERVER["REQUEST_METHOD"]==="POST"){
+    $words = preg_split("/\s+/", trim($orig));
+    $out = [];
+    foreach($words as $w){ $out[] = strrev($w); }
+    $rev = implode(" ", $out);
+}
+?>
+<form method="post">
+<input type="text" name="s" value="<?php echo htmlspecialchars($orig); ?>">
+<button type="submit">Reverse words</button>
+</form>
+<?php if($rev!==""){ echo "<p>$rev</p>"; } ?>
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$rows=[];
+if(file_exists("student.dat")){
+    $fh=fopen("student.dat","r");
+    while(($line=fgetcsv($fh,0," "))!==false){
+        if(count($line)<6) continue;
+        list($r,$name,$os,$wt,$ds,$py)=$line;
+        $total=$os+$wt+$ds+$py;
+        $p=$total/4.0;
+        $rows[]=[$r,$name,$os,$wt,$ds,$py,$total,$p];
+    }
+    fclose($fh);
+}
+?>
+<table border="1" cellpadding="6">
+<tr><th>Roll</th><th>Name</th><th>OS</th><th>WT</th><th>DS</th><th>Python</th><th>Total</th><th>%</th></tr>
+<?php foreach($rows as $row){ echo "<tr>"; foreach($row as $c){ echo "<td>".htmlspecialchars((string)$c)."</td>"; } echo "</tr>"; } ?>
+</table>
+</body></html>
+
+Viva:
+Explain self-processing form in PHP.
+How does strrev() differ from reversing word order?
+How to prevent XSS when echoing user input?
+How does fgetcsv work with custom delimiters?
+How would you validate marks and handle missing fields?
+
+-----------(Slip 2)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php session_start(); $u=isset($_POST["u"])?$_POST["u"]:""; if(isset($_POST["save"])){ $_SESSION["u"]=$u; } ?>
+<form method="post">
+<input name="u" value="<?php echo isset($_SESSION['u'])?htmlspecialchars($_SESSION['u']):htmlspecialchars($u); ?>">
+<button type="submit" name="save">Save</button>
+</form>
+<form method="post">
+<button type="submit" name="get">Get User</button>
+</form>
+<?php if(isset($_POST["get"])){ echo isset($_SESSION["u"])?("<p>Username: ".htmlspecialchars($_SESSION["u"])."</p>"):"<p>No username in session</p>"; } ?>
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$stmt=$pdo->query("SELECT id,name,price,rating FROM Item ORDER BY id");
+$rows=$stmt->fetchAll(PDO::FETCH_NUM);
+?>
+<table border="1" cellpadding="6">
+<tr><th>Id</th><th>Name</th><th>Price</th><th>Rating</th></tr>
+<?php foreach($rows as $r){ echo "<tr>"; foreach($r as $c){ echo "<td>".htmlspecialchars((string)$c)."</td>"; } echo "</tr>"; } ?>
+</table>
+</body></html>
+
+Viva:
+What is a PHP session and where is the session id stored?
+Difference between session and cookie.
+How to destroy a session securely?
+What is PDO and why use prepared statements?
+How to avoid SQL injection in PDO?
+
+-----------(Slip 3)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$n = isset($_POST["n"])?(int)$_POST["n"]:0;
+$seq = [];
+if($_SERVER["REQUEST_METHOD"]==="POST"){
+    $a=0;$b=1;
+    for($i=0;$i<$n;$i++){ $seq[]=$a; $t=$a+$b; $a=$b; $b=$t; }
+}
+?>
+<form method="post">
+<input type="number" name="n" value="<?php echo $n; ?>">
+<button type="submit">Fibonacci</button>
+</form>
+<?php if($seq) echo "<p>".implode(", ",$seq)."</p>"; ?>
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$fname = isset($_POST["fname"])?$_POST["fname"]:"";
+$choice = isset($_POST["choice"])?$_POST["choice"]:"";
+$info = "";
+if($_SERVER["REQUEST_METHOD"]==="POST" && $fname!==""){
+    if($choice==="type"){ $info = filetype($fname) ?: ""; }
+    if($choice==="mtime"){ $info = file_exists($fname)?date("Y-m-d H:i:s", filemtime($fname)):""; }
+    if($choice==="size"){ $info = file_exists($fname)?filesize($fname):""; }
+}
+?>
+<form method="post">
+<input name="fname" value="<?php echo htmlspecialchars($fname); ?>">
+<select name="choice">
+<option value="type" <?php if($choice==="type") echo "selected"; ?>>Type</option>
+<option value="mtime" <?php if($choice==="mtime") echo "selected"; ?>>Last Modified</option>
+<option value="size" <?php if($choice==="size") echo "selected"; ?>>Size</option>
+</select>
+<button type="submit">Show</button>
+</form>
+<?php if($info!=="") echo "<p>$info</p>"; ?>
+</body></html>
+
+Viva:
+What is a self-processing page?
+Iterative vs recursive Fibonacci in PHP.
+filetype vs mime_content_type.
+How to handle timezone for filemtime output?
+How to handle permissions errors when reading files?
+
+-----------(Slip 4)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<pre>
+JSON Object (Book):
+{
+  "bookno": 1,
+  "b_name": "PHP",
+  "pub_name": "AGC",
+  "b_price": 399
+}
+JSON Schema (Book):
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "type":"object",
+  "properties":{
+    "bookno":{"type":"integer"},
+    "b_name":{"type":"string"},
+    "pub_name":{"type":"string"},
+    "b_price":{"type":"number"}
+  },
+  "required":["bookno","b_name","pub_name","b_price"]
+}
+</pre>
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<button id="btn">Display</button>
+<pre id="out"></pre>
+<script>
+document.getElementById('btn').onclick=async()=>{
+  const r=await fetch('data.txt');
+  document.getElementById('out').textContent=await r.text();
+};
+</script>
+</body></html>
+
+Viva:
+What is a JSON Schema and its purpose?
+Difference between JSON and XML.
+How does fetch() handle errors?
+CORS basics for AJAX requests.
+Why validate JSON against a schema?
+
+-----------(Slip 5)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$c = isset($_POST["c"])?$_POST["c"]:"";
+$f = "";
+$err = "";
+if($_SERVER["REQUEST_METHOD"]==="POST"){
+    if($c==="" || !is_numeric($c)){ $err="Enter numeric Celsius"; }
+    else{ $f = $c*9/5+32; }
+}
+?>
+<form method="post">
+<input name="c" value="<?php echo htmlspecialchars($c); ?>">
+<button>Convert</button>
+</form>
+<?php if($err) echo "<p>$err</p>"; elseif($f!=="") echo "<p>Fahrenheit: $f</p>"; ?>
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$s1=isset($_POST["s1"])?$_POST["s1"]:"";
+$s2=isset($_POST["s2"])?$_POST["s2"]:"";
+$res="";
+if($_SERVER["REQUEST_METHOD"]==="POST"&&$s1&&$s2){
+    if(file_exists($s1)){
+        $data=file_get_contents($s1);
+        file_put_contents($s2, $data, FILE_APPEND);
+        $res="Appended.";
+    } else {$res="Source missing.";}
+}
+?>
+<form method="post">
+<input name="s1" placeholder="source" value="<?php echo htmlspecialchars($s1); ?>">
+<input name="s2" placeholder="dest" value="<?php echo htmlspecialchars($s2); ?>">
+<button>Append</button>
+</form>
+<p><?php echo $res; ?></p>
+</body></html>
+
+Viva:
+Server-side validation vs client-side validation.
+filter_var for numeric validation.
+Difference between copy and append operations.
+How to handle file permissions on Linux/Windows?
+Security risks with user-provided filenames.
+
+-----------(Slip 6)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<pre>
+JSON Object (Person):
+{
+  "firstname":"Ana","lastname":"Lee","age":22,
+  "address":{"streetaddress":"MG Road","city":"Pune","state":"MH","postalcode":"411001"}
+}
+JSON Schema:
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "type":"object",
+  "properties":{
+    "firstname":{"type":"string"},
+    "lastname":{"type":"string"},
+    "age":{"type":"integer","minimum":0},
+    "address":{"type":"object","properties":{
+      "streetaddress":{"type":"string"},
+      "city":{"type":"string"},
+      "state":{"type":"string"},
+      "postalcode":{"type":"string"}
+    },"required":["streetaddress","city","state","postalcode"]}
+  },
+  "required":["firstname","lastname","age","address"]
+}
+</pre>
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$sal = isset($_POST["sal"])?$_POST["sal"]:"";
+$rows=[];
+if($_SERVER["REQUEST_METHOD"]==="POST" && is_numeric($sal)){
+    $st=$pdo->prepare("SELECT Eid,Ename,Salary FROM Emp WHERE Salary > :s ORDER BY Salary DESC");
+    $st->execute([":s"=>$sal]);
+    $rows=$st->fetchAll(PDO::FETCH_NUM);
+}
+?>
+<form method="post">
+<input name="sal" value="<?php echo htmlspecialchars($sal); ?>" placeholder="Salary">
+<button type="submit">Fetch</button>
+</form>
+<table border="1"><?php foreach($rows as $r){ echo "<tr><td>{$r[0]}</td><td>{$r[1]}</td><td>{$r[2]}</td></tr>"; } ?></table>
+</body></html>
+
+Viva:
+Why use numeric comparison with prepared statements?
+Advantages of PDO over pg_connect.
+JSON nested objects mapping in PHP.
+How to paginate results in PDO?
+HTTP vs HTTPS for form submission.
+
+-----------(Slip 7)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$f = isset($_POST["f"])?$_POST["f"]:"";
+$msg="";
+if($_SERVER["REQUEST_METHOD"]==="POST"){
+    $msg = file_exists($f) ? "File exists" : "File does not exist";
+}
+?>
+<form method="post">
+<input name="f" value="<?php echo htmlspecialchars($f); ?>">
+<button>Check</button>
+</form>
+<p><?php echo $msg; ?></p>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$u=isset($_POST["u"])?$_POST["u"]:"";
+$a=isset($_POST["a"])?$_POST["a"]:"";
+$e=isset($_POST["e"])?$_POST["e"]:"";
+?>
+<form method="post">
+<input name="u" value="<?php echo htmlspecialchars($u); ?>" placeholder="Username">
+<input type="number" name="a" value="<?php echo htmlspecialchars($a); ?>" placeholder="Age">
+<input type="email" name="e" value="<?php echo htmlspecialchars($e); ?>" placeholder="Email">
+<button>Submit</button>
+</form>
+<?php if($_SERVER["REQUEST_METHOD"]==="POST"){ echo "<p>$u, $a, $e</p>"; } ?>
+
+</body></html>
+
+Viva:
+Difference between GET and POST in forms.
+Sticky form concept.
+file_exists vs is_file.
+Input sanitization basics.
+HTML5 input types benefits.
+
+-----------(Slip 8)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$j='{"route_no":101,"source":"Pune","destination":"Mumbai","no_of_stations":10}';
+$o=json_decode($j,true);
+echo "<p>Route No: {$o['route_no']}</p><p>Source: {$o['source']}</p><p>Destination: {$o['destination']}</p><p>Stations: {$o['no_of_stations']}</p>";
+?>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$xml=new SimpleXMLElement("<Items/>");
+for($i=1;$i<=5;$i++){
+  $it=$xml->addChild("Item");
+  $it->addChild("ItemName","Item".$i);
+  $it->addChild("ItemPrice",100*$i);
+  $it->addChild("Quantity",10*$i);
+}
+$xml->asXML("Item.xml");
+echo "<p>Item.xml created</p>";
+?>
+<link rel="stylesheet" href="item.css">
+
+</body></html>
+
+Viva:
+json_decode associative vs object mode.
+SimpleXML vs DOMDocument.
+Linking XML with CSS (xml-stylesheet PI).
+Character encoding in XML.
+Validation of JSON structure.
+
+-----------(Slip 9)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+echo "Connected";
+?>
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$count=1;
+if(isset($_COOKIE["visits"])) $count = (int)$_COOKIE["visits"] + 1;
+setcookie("visits",(string)$count,time()+3600*24*365);
+echo $count===1?"Welcome, You have visited for first time":"You have visited $count times";
+?>
+
+</body></html>
+
+Viva:
+PDO error modes.
+Cookie attributes (expires, path, samesite).
+Secure and HttpOnly flags.
+Session vs cookies trade-offs.
+Handling connection errors gracefully.
+
+-----------(Slip 10)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$xml=new SimpleXMLElement('<BookInfo/>');
+$b1=$xml->addChild('book'); $b1->addChild('bookno',1); $b1->addChild('bookname','JAVA'); $b1->addChild('authorname','Balguru Swami'); $b1->addChild('price',250); $b1->addChild('year',2006);
+$b2=$xml->addChild('book'); $b2->addChild('bookno',2); $b2->addChild('bookname','C'); $b2->addChild('authorname','Deni Ritchie'); $b2->addChild('price',500); $b2->addChild('year',1971);
+$xml->asXML('books.xml'); echo "books.xml created";
+?>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$orig = isset($_POST["s"])?$_POST["s"]:"";
+$rev = "";
+if($_SERVER["REQUEST_METHOD"]==="POST"){
+    $words = preg_split("/\s+/", trim($orig));
+    $out = [];
+    foreach($words as $w){ $out[] = strrev($w); }
+    $rev = implode(" ", $out);
+}
+?>
+<form method="post">
+<input type="text" name="s" value="<?php echo htmlspecialchars($orig); ?>">
+<button type="submit">Reverse words</button>
+</form>
+<?php if($rev!==""){ echo "<p>$rev</p>"; } ?>
+</body></html>
+
+Viva:
+XML prolog significance.
+SimpleXML vs DOM for writing files.
+Self-processing form mechanics.
+Word vs character reversal.
+HTML escaping with htmlspecialchars.
+
+-----------(Slip 11)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$f=isset($_POST["f"])?$_POST["f"]:"";
+$t="";
+if($_SERVER["REQUEST_METHOD"]==="POST"&&$f!==""){
+    $t=file_exists($f)?date("Y-m-d H:i:s",fileatime($f)):"File not found";
+}
+?>
+<form method="post"><input name="f" value="<?php echo htmlspecialchars($f); ?>"><button>Show Last Access</button></form>
+<p><?php echo $t; ?></p>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$r=$pdo->query("SELECT mname FROM Movie ORDER BY rating DESC, release_year DESC LIMIT 1")->fetchColumn();
+echo $r?("Highest rating movie: ".htmlspecialchars($r)):"No data";
+?>
+</body></html>
+
+Viva:
+difference between filemtime and fileatime.
+Filesystem that doesn't update atime.
+ORDER BY with ties handling.
+NULL handling in SQL ordering.
+Timezones for PHP date().
+
+-----------(Slip 12)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$n=isset($_POST["n"])?(int)$_POST["n"]:0;
+$f=1; if($n>0){ for($i=2;$i<=$n;$i++) $f*=$i; }
+?>
+<form method="post"><input type="number" name="n" value="<?php echo $n; ?>"><button>Factorial</button></form>
+<p><?php if($n>=0) echo $f; ?></p>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$on=isset($_POST["on"])?$_POST["on"]:"";
+$rows=[];
+if($_SERVER["REQUEST_METHOD"]==="POST" && $on!==""){
+    $sql="SELECT p.pno,p.description,p.area FROM Property p JOIN Owner o ON o.oname=p.owner WHERE o.oname=:n";
+    $st=$pdo->prepare($sql); $st->execute([":n"=>$on]); $rows=$st->fetchAll(PDO::FETCH_NUM);
+}
+?>
+<form method="post"><input name="on" value="<?php echo htmlspecialchars($on); ?>" placeholder="Owner name"><button>Show</button></form>
+<table border="1"><?php foreach($rows as $r){ echo "<tr><td>{$r[0]}</td><td>{$r[1]}</td><td>{$r[2]}</td></tr>"; } ?></table>
+</body></html>
+
+Viva:
+POST vs GET for data submission.
+JOIN types in SQL.
+Factorial growth and integer overflow in PHP.
+Validating text inputs for SQL queries.
+Displaying tabular data safely.
+
+-----------(Slip 13)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<pre>
+JSON Object:
+{"dno":10,"dname":"CS","dlocation":"Pune"}
+JSON Schema:
+{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object",
+ "properties":{"dno":{"type":"integer"},"dname":{"type":"string"},"dlocation":{"type":"string"}},
+ "required":["dno","dname","dlocation"]}
+</pre>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+session_start();
+$u=isset($_POST["u"])?$_POST["u"]:"";
+$p=isset($_POST["p"])?$_POST["p"]:"";
+if(!isset($_SESSION["tries"])) $_SESSION["tries"]=0;
+$msg="";
+if($_SERVER["REQUEST_METHOD"]==="POST"){
+    if($u==="admin" && $p==="admin"){ $_SESSION["ok"]=true; $msg="Welcome"; }
+    else{ $_SESSION["tries"]++; $msg = $_SESSION["tries"]<3 ? "Try again" : "Error"; }
+}
+if(isset($_SESSION["ok"]) && $_SESSION["ok"]===true){ echo "<h3>Welcome message</h3>"; }
+?>
+<form method="post">
+<input name="u" placeholder="Username">
+<input type="password" name="p" placeholder="Password">
+<button>Login</button>
+</form>
+<p><?php echo $msg; ?></p>
+
+</body></html>
+
+Viva:
+Session fixation and regeneration.
+Limiting login attempts strategies.
+Storing passwords securely (hashing).
+JSON schema required vs optional fields.
+HTTP status codes for auth.
+
+-----------(Slip 14)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$res="";
+if($_SERVER["REQUEST_METHOD"]==="POST" && isset($_FILES["f"])){ 
+    $name=$_FILES["f"]["name"];
+    $tmp=$_FILES["f"]["tmp_name"];
+    $type=$_FILES["f"]["type"];
+    $size=$_FILES["f"]["size"];
+    if(is_uploaded_file($tmp)){ 
+        if(!is_dir("uploads")){ mkdir("uploads"); }
+        move_uploaded_file($tmp,"uploads/".basename($name)); 
+    }
+
+    $res = "Name: $name | Type: $type | Size: $size";
+}
+?>
+<form method="post" enctype="multipart/form-data">
+<input type="file" name="f" required>
+<button type="submit">Upload</button>
+</form>
+<?php if($res!=="") echo "<p>$res</p>"; ?>
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$last = isset($_COOKIE["last"])?$_COOKIE["last"]:"";
+if($last===""){ echo "Welcome, You have visited for first time"; }
+else{ echo "Last access: ".htmlspecialchars($last); }
+setcookie("last", date("Y-m-d H:i:s"), time()+3600*24*365);
+?>
+
+</body></html>
+
+Viva:
+enctype multipart/form-data purpose.
+Temporary upload directory in PHP.
+Cookie persistence and expiration.
+Max upload size (php.ini settings).
+MIME type vs file extension.
+
+-----------(Slip 15)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$n=isset($_POST["n"])?(int)$_POST["n"]:0;
+$f=[]; if($n>0){ for($i=1;$i<=$n;$i++) if($n%$i==0) $f[]=$i; }
+?>
+<form method="post"><input type="number" name="n" value="<?php echo $n; ?>"><button>Factors</button></form>
+<p><?php echo implode(", ",$f); ?></p>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$h=isset($_POST["h"])?$_POST["h"]:"";
+$rows=[];
+if($_SERVER["REQUEST_METHOD"]==="POST" && $h!==""){
+    $sql="SELECT d.doc_no,d.dname FROM Doctor d JOIN Hospital h ON d.hosp_no=h.hosp_no WHERE h.hname=:x";
+    $st=$pdo->prepare($sql); $st->execute([":x"=>$h]); $rows=$st->fetchAll(PDO::FETCH_NUM);
+}
+?>
+<form method="post"><input name="h" value="<?php echo htmlspecialchars($h); ?>" placeholder="Hospital name"><button>Show</button></form>
+<table border="1"><?php foreach($rows as $r){ echo "<tr><td>{$r[0]}</td><td>{$r[1]}</td></tr>"; } ?></table>
+</body></html>
+
+Viva:
+Divisors algorithm complexity.
+JOIN cardinalities (many-one).
+Input validation for names.
+Indexing for faster lookups.
+Rendering tabular data.
+
+-----------(Slip 16)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$xml=new SimpleXMLElement("<Products/>");
+for($i=1;$i<=5;$i++){
+  $p=$xml->addChild("Product");
+  $p->addChild("ProductName","P".$i);
+  $p->addChild("ProductPrice",100*$i);
+  $p->addChild("Quantity",5*$i);
+}
+$xml->asXML("Product.xml"); echo "Product.xml created";
+?>
+<link rel="stylesheet" href="product.css">
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$d=isset($_POST["d"])?$_POST["d"]:"";
+$c=0;
+if($_SERVER["REQUEST_METHOD"]==="POST" && $d!==""){
+    $st=$pdo->prepare("SELECT COUNT(*) FROM Emp e JOIN Dept d ON e.dno=d.dno WHERE d.dname=:d");
+    $st->execute([":d"=>$d]); $c=$st->fetchColumn();
+}
+?>
+<form method="post"><input name="d" value="<?php echo htmlspecialchars($d); ?>" placeholder="Department name"><button>Count</button></form>
+<p><?php if($d!=="") echo "Employees: $c"; ?></p>
+</body></html>
+
+Viva:
+XML + CSS styling approach.
+COUNT(*) vs COUNT(column).
+JOIN path correctness.
+Handling departments with zero employees.
+Normalization for Dept-Emp.
+
+-----------(Slip 17)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<pre>
+[
+ {"Pizzaname":"Margherita","Base":"Thin","Toppings":["Cheese","Tomato"],"spicy":false,"veg":true},
+ {"Pizzaname":"Pepperoni","Base":"Classic","Toppings":["Pepperoni","Cheese"],"spicy":true,"veg":false},
+ {"Pizzaname":"Paneer Tikka","Base":"Cheese Burst","Toppings":["Paneer","Onion"],"spicy":true,"veg":true}
+]
+</pre>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<button id="btn">Get Details</button>
+<table id="t" border="1"></table>
+<script>
+document.getElementById('btn').onclick=async ()=>{
+  const r=await fetch('teacher.php'); document.getElementById('t').innerHTML=await r.text();
+};
+</script>
+</body></html>
+<!-- teacher.php -->
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$stmt=$pdo->query("SELECT Tno,Name,Subject,Research FROM Teacher");
+$rows=$stmt->fetchAll(PDO::FETCH_NUM);
+echo "<tr><th>Tno</th><th>Name</th><th>Subject</th><th>Research</th></tr>";
+foreach($rows as $r){ echo "<tr><td>{$r[0]}</td><td>{$r[1]}</td><td>{$r[2]}</td><td>{$r[3]}</td></tr>"; }
+?>
+
+Viva:
+AJAX vs full-page reload.
+Security for exposing DB via PHP endpoints.
+JSON vs HTML responses in AJAX.
+Prepared statements in dynamic queries.
+Caching considerations in AJAX calls.
+
+-----------(Slip 18)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<form method="post">
+<input name="u" placeholder="Username">
+<button>Set Cookie</button>
+</form>
+<?php if($_SERVER["REQUEST_METHOD"]==="POST"){ setcookie("username", $_POST["u"], time()+3600); echo "Cookie set for 1 hour"; } ?>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$res="";
+if($_SERVER["REQUEST_METHOD"]==="POST" && isset($_FILES["f"])){ 
+    $name=$_FILES["f"]["name"];
+    $tmp=$_FILES["f"]["tmp_name"];
+    $type=$_FILES["f"]["type"];
+    $size=$_FILES["f"]["size"];
+    if(is_uploaded_file($tmp)){ 
+        if(!is_dir("uploads")){ mkdir("uploads"); }
+        move_uploaded_file($tmp,"uploads/".basename($name)); 
+    }
+
+    $res = "Name: $name | Type: $type | Size: $size";
+}
+?>
+<form method="post" enctype="multipart/form-data">
+<input type="file" name="f" required>
+<button type="submit">Upload</button>
+</form>
+<?php if($res!=="") echo "<p>$res</p>"; ?>
+</body></html>
+
+Viva:
+Cookie lifetime units.
+Domain/path scoping of cookies.
+Upload security risks.
+Validating file extensions.
+CSRF basics.
+
+-----------(Slip 19)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$f=isset($_POST["f"])?$_POST["f"]:"";
+$c="";
+if($_SERVER["REQUEST_METHOD"]==="POST" && file_exists($f)){
+    $h=fopen($f,"r"); $c=fread($h, filesize($f)); fclose($h);
+}
+?>
+<form method="post"><input name="f" value="<?php echo htmlspecialchars($f); ?>"><button>Read</button></form>
+<pre><?php echo htmlspecialchars($c); ?></pre>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$r=isset($_POST["r"])?$_POST["r"]:"";
+$row=null;
+if($_SERVER["REQUEST_METHOD"]==="POST" && $r!==""){
+    $st=$pdo->prepare("SELECT route_no,source,destination,no_of_stations FROM Route WHERE route_no=:r");
+    $st->execute([":r"=>$r]); $row=$st->fetch(PDO::FETCH_ASSOC);
+}
+?>
+<form method="post"><input name="r" value="<?php echo htmlspecialchars($r); ?>" placeholder="Route no"><button>Get</button></form>
+<?php if($row) { echo "<p>{$row['route_no']} {$row['source']} {$row['destination']} {$row['no_of_stations']}</p>"; } ?>
+</body></html>
+
+Viva:
+fread vs file_get_contents.
+Binary vs text files.
+Prepared statements with integers.
+Form validation for numeric fields.
+Display formatting for data.
+
+-----------(Slip 20)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$n=isset($_POST["n"])?(int)$_POST["n"]:0;
+$s=0; for($i=1;$i<$n;$i++) if($n%$i==0) $s+=$i;
+$msg = $n>0 ? ($s==$n?"Perfect":"Not perfect") : "";
+?>
+<form method="post"><input type="number" name="n" value="<?php echo $n; ?>"><button>Check</button></form>
+<p><?php echo $msg; ?></p>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<button id="btn">Get Details</button>
+<table id="t" border="1"></table>
+<script>
+document.getElementById('btn').onclick=async()=>{
+  const r=await fetch('students.json');
+  const d=await r.json();
+  let h="<tr><th>Roll</th><th>Name</th><th>Age</th></tr>";
+  d.forEach(s=>h+=`<tr><td>${s.roll}</td><td>${s.name}</td><td>${s.age}</td></tr>`);
+  document.getElementById('t').innerHTML=h;
+};
+</script>
+
+</body></html>
+
+Viva:
+Definition of perfect number.
+AJAX JSON parsing.
+Time complexity for divisor sum.
+Data formats for AJAX endpoints.
+Basic DOM manipulation.
+
+-----------(Slip 21)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$f=isset($_POST["f"])?$_POST["f"]:""; $o="";
+if($_SERVER["REQUEST_METHOD"]==="POST"){
+    if(file_exists($f)){ $o="Size: ".filesize($f)." | Modified: ".date("Y-m-d H:i:s", filemtime($f)); }
+    else{ $o="File not found"; }
+}
+?>
+<form method="post"><input name="f" value="<?php echo htmlspecialchars($f); ?>"><button>Check</button></form>
+<p><?php echo $o; ?></p>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+if(isset($_POST["bg"])&&isset($_POST["fg"])){ setcookie("bg",$_POST["bg"]); setcookie("fg",$_POST["fg"]); header("Location: page2.php"); exit; }
+$bg=$_COOKIE["bg"]??"#ffffff"; $fg=$_COOKIE["fg"]??"#000000";
+?>
+<form method="post">
+<input type="color" name="bg" value="<?php echo htmlspecialchars($bg); ?>">
+<input type="color" name="fg" value="<?php echo htmlspecialchars($fg); ?>">
+<button>Next</button>
+</form>
+
+</body></html>
+<!-- page2.php -->
+<?php $bg=$_COOKIE["bg"]??"#fff"; $fg=$_COOKIE["fg"]??"#000"; echo "<p>Selected BG: $bg, FG: $fg</p><a href='page3.php'>Apply</a>"; ?>
+<!-- page3.php -->
+<?php $bg=$_COOKIE["bg"]??"#fff"; $fg=$_COOKIE["fg"]??"#000"; echo "<body style='background:$bg;color:$fg'>Applied</body>"; ?>
+
+Viva:
+filemtime vs filectime on Linux.
+Cookie flow across multiple pages.
+Hex color validation.
+State management without sessions.
+Security of reflecting styles from cookies.
+
+-----------(Slip 22)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$res="";
+if($_SERVER["REQUEST_METHOD"]==="POST" && isset($_FILES["f"])){ 
+    $name=$_FILES["f"]["name"];
+    $tmp=$_FILES["f"]["tmp_name"];
+    $type=$_FILES["f"]["type"];
+    $size=$_FILES["f"]["size"];
+    if(is_uploaded_file($tmp)){ 
+        if(!is_dir("uploads")){ mkdir("uploads"); }
+        move_uploaded_file($tmp,"uploads/".basename($name)); 
+    }
+     $res.=" | Modified: ".(file_exists("uploads/".basename($name))?date("Y-m-d H:i:s", filemtime("uploads/".basename($name))):""); 
+    $res = "Name: $name | Type: $type | Size: $size";
+}
+?>
+<form method="post" enctype="multipart/form-data">
+<input type="file" name="f" required>
+<button type="submit">Upload</button>
+</form>
+<?php if($res!=="") echo "<p>$res</p>"; ?>
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$h=isset($_POST["h"])?$_POST["h"]:""; $c=0;
+if($_SERVER["REQUEST_METHOD"]==="POST" && $h!==""){
+    $st=$pdo->prepare("SELECT COUNT(*) FROM Doctor d JOIN Hospital h ON d.hosp_no=h.hosp_no WHERE h.hname=:h");
+    $st->execute([":h"=>$h]); $c=$st->fetchColumn();
+}
+?>
+<form method="post"><input name="h" value="<?php echo htmlspecialchars($h); ?>" placeholder="Hospital name"><button>Count</button></form>
+<p><?php if($h!=="") echo "Doctors visiting: $c"; ?></p>
+</body></html>
+
+Viva:
+Why move_uploaded_file is important.
+Atomicity of COUNT queries.
+Handling hospitals with same name.
+Data integrity constraints (FK).
+Storing uploads outside webroot.
+
+-----------(Slip 23)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<pre>
+JSON Object:
+{"pno":1,"pname":"ERP","pduration":12,"pbudget":500000}
+JSON Schema:
+{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object",
+ "properties":{"pno":{"type":"integer"},"pname":{"type":"string"},"pduration":{"type":"integer"},"pbudget":{"type":"number"}},
+ "required":["pno","pname","pduration","pbudget"]}
+</pre>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$f=isset($_POST["f"])?$_POST["f"]:""; $c="";
+if($_SERVER["REQUEST_METHOD"]==="POST" && file_exists($f)){
+    $c=strtoupper(file_get_contents($f));
+}
+?>
+<form method="post"><input name="f" value="<?php echo htmlspecialchars($f); ?>"><button>Show Upper</button></form>
+<pre><?php echo htmlspecialchars($c); ?></pre>
+
+</body></html>
+
+Viva:
+toupper vs strtoupper.
+Unicode considerations in uppercasing.
+JSON numeric types vs PHP types.
+Schema validation tooling.
+Security with reading arbitrary files.
+
+-----------(Slip 24)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+$xml=new SimpleXMLElement('<NovelInfo/>');
+$n1=$xml->addChild('novel'); $n1->addChild('novelno',1); $n1->addChild('novelname','Jane Eyre'); $n1->addChild('authorname','Charlotte Bronte'); $n1->addChild('price',250); $n1->addChild('year',2006);
+$n2=$xml->addChild('novel'); $n2->addChild('novelno',2); $n2->addChild('novelname','Frankenstein'); $n2->addChild('authorname','Mary Shelley'); $n2->addChild('price',500); $n2->addChild('year',1971);
+$xml->asXML('Novel.xml'); echo "Novel.xml created";
+?>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$dsn = "pgsql:host=localhost;port=5432;dbname=college";
+$user = "postgres";
+$pass = "postgres";
+try{$pdo=new PDO($dsn,$user,$pass,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);}
+catch(PDOException $e){die("DB connection failed: ".$e->getMessage());}
+?>
+<?php
+$s=isset($_POST["s"])?$_POST["s"]:""; $rows=[];
+if($_SERVER["REQUEST_METHOD"]==="POST" && $s!==""){
+    $st=$pdo->prepare("SELECT route_no,source,destination,no_of_stations FROM Route WHERE source ILIKE :s");
+    $st->execute([":s"=>$s]); $rows=$st->fetchAll(PDO::FETCH_NUM);
+}
+?>
+<form method="post"><input name="s" value="<?php echo htmlspecialchars($s); ?>" placeholder="Source"><button>Search</button></form>
+<table border="1"><?php foreach($rows as $r){ echo "<tr><td>{$r[0]}</td><td>{$r[1]}</td><td>{$r[2]}</td><td>{$r[3]}</td></tr>"; } ?></table>
+</body></html>
+
+Viva:
+ILIKE vs LIKE in PostgreSQL.
+XML file generation flow.
+Choosing primary keys for Route.
+Case-insensitive search implications.
+Output escaping for HTML.
+
+-----------(Slip 25)--------------
+Q1:
+<!DOCTYPE html><html><body>
+<?php
+echo "<pre>";
+print_r($_SERVER);
+echo "</pre>";
+?>
+
+</body></html>
+
+Q2:
+<!DOCTYPE html><html><body>
+<?php
+$s1=isset($_POST["s1"])?$_POST["s1"]:"";
+$s2=isset($_POST["s2"])?$_POST["s2"]:"";
+$msg="";
+if($_SERVER["REQUEST_METHOD"]==="POST" && $s1 && $s2){
+    if(file_exists($s1)){
+        copy($s1,$s2);
+        $msg="Copied";
+    } else { $msg="Source missing"; }
+}
+?>
+<form method="post">
+<input name="s1" placeholder="source" value="<?php echo htmlspecialchars($s1); ?>">
+<input name="s2" placeholder="destination" value="<?php echo htmlspecialchars($s2); ?>">
+<button>Copy</button>
+</form>
+<p><?php echo $msg; ?></p>
+
+</body></html>
+
+Viva:
+Common $_SERVER keys used in apps.
+copy vs stream copy performance.
+Overwriting destination safety.
+Path traversal protections.
+Server variables and proxies.
+
