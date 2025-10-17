@@ -1,0 +1,446 @@
+-----------(🧾 FILE HANDLING)--------------
+
+Slip 7 – Accept filename; check if file exists
+This program checks if the given file exists using file_exists() function.
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<input type="text" name="fname" placeholder="Enter filename" required>
+<input type="submit" value="Check File">
+</form>
+<?php
+if($_SERVER["REQUEST_METHOD"]=="POST"){
+    $file=$_POST['fname'];
+    if(file_exists($file))
+        echo "<h3>File exists: $file</h3>";
+    else
+        echo "<h3>File not found: $file</h3>";
+}
+?>
+</body>
+</html>
+
+
+Slip 11 – Accept filename; display last access time of the file
+This program displays when a file was last accessed using fileatime().
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<input type="text" name="fname" placeholder="Enter filename" required>
+<input type="submit" value="Show Access Time">
+</form>
+<?php
+if($_SERVER["REQUEST_METHOD"]=="POST"){
+    $f=$_POST['fname'];
+    if(file_exists($f)){
+        echo "<h3>Last accessed: ".date("d-m-Y H:i:s",fileatime($f))."</h3>";
+    }else echo "<h3>File not found.</h3>";
+}
+?>
+</body>
+</html>
+
+
+Slip 14 – Upload a file to the server; display size and type
+This program uploads a file and displays its type and size.
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post" enctype="multipart/form-data">
+<input type="file" name="file" required>
+<input type="submit" value="Upload">
+</form>
+<?php
+if($_SERVER["REQUEST_METHOD"]=="POST"){
+    $f=$_FILES['file'];
+    echo "File Name: ".$f['name']."<br>";
+    echo "Type: ".$f['type']."<br>";
+    echo "Size: ".$f['size']." bytes";
+}
+?>
+</body>
+</html>
+
+
+Slip 19 – Read contents of file using fread()
+This program reads file contents using fread().
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<input type="text" name="fname" placeholder="Enter filename" required>
+<input type="submit" value="Read File">
+</form>
+<?php
+if($_SERVER["REQUEST_METHOD"]=="POST"){
+    $f=$_POST['fname'];
+    if(file_exists($f)){
+        $h=fopen($f,"r");
+        echo nl2br(fread($h,filesize($f)));
+        fclose($h);
+    }else echo "File not found.";
+}
+?>
+</body>
+</html>
+
+
+Slip 21 – Accept filename; check if exists; display size and last modified time
+Uses filesize() and filemtime() functions.
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<input type="text" name="fname" placeholder="Enter filename" required>
+<input type="submit" value="Show Info">
+</form>
+<?php
+if($_SERVER["REQUEST_METHOD"]=="POST"){
+    $f=$_POST['fname'];
+    if(file_exists($f)){
+        echo "File Size: ".filesize($f)." bytes<br>";
+        echo "Last Modified: ".date("d-m-Y H:i:s",filemtime($f));
+    }else echo "File not found.";
+}
+?>
+</body>
+</html>
+
+
+Slip 22 – Upload file and display size and last modified time
+The program uploads a file and moves it to current directory, then shows details.
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post" enctype="multipart/form-data">
+<input type="file" name="f" required>
+<input type="submit" value="Upload">
+</form>
+<?php
+if($_SERVER["REQUEST_METHOD"]=="POST"){
+    $f=$_FILES['f'];
+    move_uploaded_file($f['tmp_name'],$f['name']);
+    echo "Uploaded File: ".$f['name']."<br>";
+    echo "Size: ".filesize($f['name'])." bytes<br>";
+    echo "Modified: ".date("d-m-Y H:i:s",filemtime($f['name']));
+}
+?>
+</body>
+</html>
+
+
+Slip 25 – Display server information
+Displays server variables from $_SERVER superglobal.
+
+<!DOCTYPE html>
+<html>
+<body>
+<?php
+foreach($_SERVER as $k=>$v){
+    if(strpos($k,"SERVER_")===0)
+        echo "$k : $v<br>";
+}
+?>
+</body>
+</html>
+
+
+-----------(🔤 STRING / FORM PROCESSING)--------------
+
+Slip 1 – Reverse each word in string
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<input type="text" name="text" placeholder="Enter text" required>
+<input type="submit" value="Reverse Words">
+</form>
+<?php
+if($_POST){
+    $t=$_POST['text'];
+    $w=explode(" ",$t);
+    foreach($w as $x) echo strrev($x)." ";
+}
+?>
+</body>
+</html>
+
+
+Slip 3 – Fibonacci Series
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<input type="number" name="n" required>
+<input type="submit" value="Show Series">
+</form>
+<?php
+if($_POST){
+    $a=0;$b=1;
+    for($i=0;$i<$_POST['n'];$i++){
+        echo $a." ";
+        $c=$a+$b; $a=$b; $b=$c;
+    }
+}
+?>
+</body>
+</html>
+
+
+Slip 12 – Factorial of number
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<input type="number" name="n" required>
+<input type="submit" value="Find Factorial">
+</form>
+<?php
+if($_POST){
+    $n=$_POST['n'];$f=1;
+    for($i=1;$i<=$n;$i++) $f*=$i;
+    echo "Factorial of $n is $f";
+}
+?>
+</body>
+</html>
+
+
+Slip 15 – Factors of number
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<input type="number" name="n" required>
+<input type="submit" value="Show Factors">
+</form>
+<?php
+if($_POST){
+    $n=$_POST['n'];
+    for($i=1;$i<=$n;$i++)
+        if($n%$i==0) echo $i." ";
+}
+?>
+</body>
+</html>
+
+
+Slip 20 – Perfect number check
+
+<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<input type="number" name="n" required>
+<input type="submit" value="Check">
+</form>
+<?php
+if($_POST){
+    $n=$_POST['n'];$s=0;
+    for($i=1;$i<$n;$i++) if($n%$i==0) $s+=$i;
+    echo $s==$n?"$n is Perfect":"$n is not Perfect";
+}
+?>
+</body>
+</html>
+
+
+-----------(💾 JSON OBJECTS & SCHEMAS)--------------
+
+Slip 4 – JSON Object for Book
+
+{
+  "bookno":1,
+  "b_name":"Let Us C",
+  "pub_name":"BPB Publications",
+  "b_price":450
+}
+
+Slip 6 – JSON Object for Person with nested Address
+
+{
+ "firstname":"Amit",
+ "lastname":"Patil",
+ "age":22,
+ "address":{
+   "streetaddress":"123 MG Road",
+   "city":"Pune",
+   "state":"Maharashtra",
+   "postalcode":"411001"
+ }
+}
+
+Slip 8 – JSON Object for Route and decode in PHP
+
+<?php
+$json='{"route_no":101,"source":"Pune","destination":"Mumbai","no_of_stations":12}';
+$r=json_decode($json);
+echo "Route No: $r->route_no<br>Source: $r->source<br>Destination: $r->destination<br>Stations: $r->no_of_stations";
+?>
+
+Slip 13 – JSON for Department
+
+{"dno":10,"dname":"Computer Science","dlocation":"Building A"}
+
+Slip 17 – JSON Array for Pizza objects
+
+{
+ "Pizzas":[
+  {"Pizzaname":"Margherita","Base":"Thin Crust","Toppings":["Cheese","Tomato"],"spicy":false,"veg":true},
+  {"Pizzaname":"Pepperoni","Base":"Regular","Toppings":["Cheese","Pepperoni"],"spicy":true,"veg":false},
+  {"Pizzaname":"Paneer Tikka","Base":"Cheese Burst","Toppings":["Paneer","Capsicum"],"spicy":true,"veg":true}
+ ]
+}
+
+Slip 23 – JSON for Project
+
+{"pno":101,"pname":"Smart City","pduration":"6 months","pbudget":1500000}
+
+
+-----------(📂 XML CREATION)--------------
+
+Slip 10 – BookInfo XML
+
+<?xml version="1.0" encoding="UTF-8"?>
+<BookInfo>
+ <book>
+  <bookno>1</bookno>
+  <bookname>JAVA</bookname>
+  <authorname>Balguru Swami</authorname>
+  <price>250</price>
+  <year>2006</year>
+ </book>
+ <book>
+  <bookno>2</bookno>
+  <bookname>C</bookname>
+  <authorname>Dennis Ritchie</authorname>
+  <price>500</price>
+  <year>1971</year>
+ </book>
+</BookInfo>
+
+Slip 16 – Product XML + CSS
+
+<Product>
+ <ProductName>Pen</ProductName>
+ <ProductPrice>10</ProductPrice>
+ <Quantity>50</Quantity>
+</Product>
+
+<style>
+ProductName {color:red;font-family:copperplate;font-size:16pt;font-weight:bold;}
+ProductPrice,Quantity {color:yellow;font-family:arial;font-size:12pt;font-weight:bold;}
+</style>
+
+Slip 24 – NovelInfo XML
+
+<NovelInfo>
+ <novel>
+  <novelno>1</novelno>
+  <novelname>Jane Eyre</novelname>
+  <authorname>Charlotte Bronte</authorname>
+  <price>250</price>
+  <year>2006</year>
+ </novel>
+ <novel>
+  <novelno>2</novelno>
+  <novelname>Frankenstein</novelname>
+  <authorname>Mary Shelley</authorname>
+  <price>500</price>
+  <year>1971</year>
+ </novel>
+</NovelInfo>
+
+
+-----------(🎓 VIVA QUESTIONS WITH ANSWERS)--------------
+
+1. What is PHP?
+PHP (Hypertext Preprocessor) is a server-side scripting language used to develop dynamic web pages and connect to databases.
+
+2. What are PHP superglobals?
+They are predefined variables accessible anywhere in a script, like $_POST, $_GET, $_FILES, $_SESSION, $_COOKIE, $_SERVER.
+
+3. Difference between GET and POST methods?
+GET sends data in the URL and is visible; POST sends data securely in the request body.
+
+4. What does file_exists() do?
+It checks if a file or directory exists and returns true or false.
+
+5. What is fopen() used for?
+It opens a file in a specific mode like "r" for read, "w" for write.
+
+6. Difference between filemtime() and fileatime()?
+filemtime() gives the last modified time, fileatime() gives the last accessed time of a file.
+
+7. What is json_encode()?
+It converts PHP data into JSON string format for sending data to a client.
+
+8. What is json_decode()?
+It converts a JSON string into a PHP object or array for processing on the server.
+
+9. What is XML?
+XML (Extensible Markup Language) is used to store and transport structured data.
+
+10. Difference between XML and JSON?
+XML uses nested tags and is verbose; JSON uses key-value pairs and is lightweight.
+
+11. What is AJAX?
+AJAX stands for Asynchronous JavaScript and XML, used to exchange data with the server without reloading the web page.
+
+12. What is a session in PHP?
+A session stores user data across multiple web pages on the server.
+
+13. What is a cookie?
+A cookie stores small data on the user's browser to remember information like username or theme.
+
+14. How to connect PHP to database?
+Using mysqli_connect("host","user","password","dbname");
+
+15. What is SQL?
+SQL (Structured Query Language) is used to insert, update, delete, and retrieve data from relational databases.
+
+16. Difference between session and cookie?
+Sessions are stored on the server and expire after closing the browser; cookies are stored on the client system.
+
+17. What is date("d-m-Y H:i:s")?
+It displays the current date and time in the format Day-Month-Year Hour:Minute:Seconds.
+
+18. What is the use of move_uploaded_file()?
+It moves an uploaded file from the temporary folder to the desired permanent location on the server.
+
+19. What is explode() in PHP?
+It splits a string into an array using a specified separator.
+
+20. What is implode() in PHP?
+It joins array elements into a single string with a specified separator.
+
+21. What is strrev()?
+It reverses a given string.
+
+22. What is a JSON schema?
+A JSON schema defines the structure, type, and rules for a JSON object.
+
+23. Can we style XML?
+Yes, using CSS or XSL stylesheets.
+
+24. What is $_SERVER?
+It holds information about headers, paths, and script locations on the server.
+
+25. What is difference between include() and require()?
+include() gives a warning on failure; require() stops script execution.
+
+------------------------------------------------
+End of File
+------------------------------------------------
