@@ -291,7 +291,7 @@ Here is a short, clean JSON Object with nested structure (nothing skipped):
 JSON Object (Person with Address)
 {
   "firstname": "Sarthak",
-  "lastname": "Sharma",
+  "lastname": "Khandve",
   "age": 20,
   "address": {
     "streetaddress": "MG Road",
