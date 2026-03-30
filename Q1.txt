@@ -1,0 +1,1258 @@
+
+
+
+Q1. Write a PHP script to accept a string and then display each word of string in reverse  
+order by using self processing form 
+
+short and easy without skipping any line
+
+Here is a short, clean, complete PHP self-processing form (nothing skipped, includes HTML + PHP in one file):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reverse Words</title>
+</head>
+<body>
+
+<form method="post">
+    Enter String:
+    <input type="text" name="str" required>
+    <input type="submit" name="submit" value="Reverse">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $str = $_POST['str'];
+
+    // Convert string into array of words
+    $words = explode(" ", $str);
+
+    // Reverse array
+    $words = array_reverse($words);
+
+    // Join words back into string
+    $result = implode(" ", $words);
+
+    echo "<br>Reversed String: " . $result;
+}
+?>
+
+</body>
+</html>
+How it works (quick clarity):
+explode() → breaks string into words
+
+array_reverse() → reverses order
+
+implode() → joins back into string
+
+If you want, I can also give a 1-mark/2-mark ultra-short exam version or version reversing each word individually (not order)—just tell me.
+
+
+Q2. Create HTML to accept username. On submit store username into the session. Create another 
+HTML containing button as “Get User”. On click of it display username from session.
+short and easy without skipping any line
+
+Here is a short, complete solution using sessions (3 files, nothing skipped):
+
+1. index.php (Accept username & store in session)
+<?php
+session_start();
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Store Username</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Username:
+    <input type="text" name="uname" required>
+    <input type="submit" name="submit" value="Save">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $_SESSION['user'] = $_POST['uname'];
+    echo "<br>Username stored in session";
+}
+?>
+
+<a href="getuser.php">Go to Get User Page</a>
+
+</body>
+</html>
+2. getuser.php (Button to get username)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get User</title>
+</head>
+<body>
+
+<form action="display.php" method="post">
+    <input type="submit" value="Get User">
+</form>
+
+</body>
+</html>
+3. display.php (Display username from session)
+<?php
+session_start();
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Display User</title>
+</head>
+<body>
+
+<?php
+if(isset($_SESSION['user']))
+{
+    echo "Username is: " . $_SESSION['user'];
+}
+else
+{
+    echo "No username found in session";
+}
+?>
+
+</body>
+</html>
+Flow (important for exam):
+Enter username → stored using $_SESSION
+
+Click Get User → opens next page
+
+Username displayed from session
+
+If you want, I can compress this into a 2-file version (even shorter for exams).
+
+
+Q3. Design HTML to accept a number from the user. Write PHP program to display Fibonacci 
+Series. (Use the concept of self-processing page.) 
+
+short and easy without skipping any line
+
+Here is a short, clean self-processing PHP program (HTML + PHP in one file, nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fibonacci Series</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Number:
+    <input type="number" name="num" required>
+    <input type="submit" name="submit" value="Show">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $n = $_POST['num'];
+
+    $a = 0;
+    $b = 1;
+
+    echo "<br>Fibonacci Series: ";
+
+    for($i = 1; $i <= $n; $i++)
+    {
+        echo $a . " ";
+        $c = $a + $b;
+        $a = $b;
+        $b = $c;
+    }
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+Starts with 0, 1
+
+Each next number = sum of previous two
+
+Loop runs $n times
+
+If needed, I can also give a recursive version (theory-friendly) or ultra-short exam version.
+
+
+Q4. Create JSON Object and JSON schema for a Book. 
+Book (bookno, b_name, pub_name, b_price) 
+
+short and easy without skipping any line
+
+Here is a short, clean answer with both JSON Object and JSON Schema (nothing skipped):
+
+1. JSON Object (Book)
+{
+  "bookno": 101,
+  "b_name": "Java Programming",
+  "pub_name": "Tech Publications",
+  "b_price": 450
+}
+2. JSON Schema (Book)
+{
+  "type": "object",
+  "properties": {
+    "bookno": {
+      "type": "integer"
+    },
+    "b_name": {
+      "type": "string"
+    },
+    "pub_name": {
+      "type": "string"
+    },
+    "b_price": {
+      "type": "number"
+    }
+  },
+  "required": ["bookno", "b_name", "pub_name", "b_price"]
+}
+Quick clarity:
+JSON Object → actual data
+
+JSON Schema → structure/validation rules
+
+If you want, I can give a 1-mark ultra-short version or with validation (min/max, pattern, etc.).
+
+
+Q5. Design HTML page to accept temperature in Celsius from user. Display temperature in 
+Fahrenheit using PHP. Write code in PHP to validate the user input. 
+
+short and easy without skipping any line
+
+Here is a short, complete self-processing PHP program with validation (HTML + PHP in one file, nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Celsius to Fahrenheit</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Temperature (°C):
+    <input type="text" name="temp" required>
+    <input type="submit" name="submit" value="Convert">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $c = $_POST['temp'];
+
+    // Validation: check numeric value
+    if(is_numeric($c))
+    {
+        $f = ($c * 9/5) + 32;
+        echo "<br>Temperature in Fahrenheit: " . $f;
+    }
+    else
+    {
+        echo "<br>Please enter a valid numeric value";
+    }
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+is_numeric() → validates input
+
+Formula → F = (C × 9/5) + 32
+
+Self-processing → same page handles form + logic
+
+If you want, I can also add range validation (like -273 min) or make an ultra-short exam version.
+
+
+Q6. Create JSON Object for Person. 
+Person (firstname, lastname, age, address) 
+For address create nested structure: 
+Address (streetaddress, city, state, postalcode)
+
+short and easy without skipping any line
+
+Here is a short, clean JSON Object with nested structure (nothing skipped):
+
+JSON Object (Person with Address)
+{
+  "firstname": "Sarthak",
+  "lastname": "Sharma",
+  "age": 20,
+  "address": {
+    "streetaddress": "MG Road",
+    "city": "Pune",
+    "state": "Maharashtra",
+    "postalcode": "411001"
+  }
+}
+Quick clarity:
+address is a nested JSON object
+
+Inside it → street, city, state, postal code
+
+If you want, I can also give the JSON Schema for this (similar to Q4).
+
+
+Q7. Write a program to accept filename from user. Check whether file exists or not. Display 
+appropriate message.     
+
+short and easy without skipping any line
+
+Here is a short, complete PHP self-processing program (HTML + PHP in one file, nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check File Exists</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Filename:
+    <input type="text" name="fname" required>
+    <input type="submit" name="submit" value="Check">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $file = $_POST['fname'];
+
+    // Check if file exists
+    if(file_exists($file))
+    {
+        echo "<br>File exists";
+    }
+    else
+    {
+        echo "<br>File does not exist";
+    }
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+file_exists() → checks presence of file
+
+Self-processing → same page handles form + logic
+
+If you want, I can also give version with upload file check or directory-specific path check.
+
+
+Q8. Create JSON Object for Route. 
+Route (route_no, source, destination, no_of_stations) 
+Decode the JSON Route object in PHP program. Display the details of the Route.
+
+short and easy without skipping any line
+
+Here is a short, complete PHP program (JSON Object + Decode + Display, nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JSON Route</title>
+</head>
+<body>
+
+<?php
+// Create JSON Object
+$json = '{
+    "route_no": 101,
+    "source": "Pune",
+    "destination": "Mumbai",
+    "no_of_stations": 15
+}';
+
+// Decode JSON
+$data = json_decode($json, true);
+
+// Display details
+echo "Route No: " . $data['route_no'] . "<br>";
+echo "Source: " . $data['source'] . "<br>";
+echo "Destination: " . $data['destination'] . "<br>";
+echo "No of Stations: " . $data['no_of_stations'];
+?>
+
+</body>
+</html>
+Quick understanding:
+JSON string → $json
+
+json_decode(..., true) → converts to associative array
+
+Access using $data['key']
+
+If you want, I can also give encode + decode version or form input version.
+
+
+Q9. Write a PHP program to check for database connection. On successful connection display 
+appropriate message.
+
+short and easy without skipping any line
+
+Here is a short, complete PHP program to check database connection (nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DB Connection</title>
+</head>
+<body>
+
+<?php
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db   = "test";
+
+// Create connection
+$conn = mysqli_connect($host, $user, $pass, $db);
+
+// Check connection
+if($conn)
+{
+    echo "Database connected successfully";
+}
+else
+{
+    echo "Connection failed";
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+mysqli_connect() → connects to MySQL
+
+If $conn is true → success
+
+Else → failure message
+
+If you want, I can also give error display version using mysqli_connect_error() (better for exams).
+
+
+Q10. Write a PHP script to generate an XML file in the following format in PHP. 
+<?xml version="1.0" encoding="UTF-8"?> 
+<BookInfo> 
+<book> 
+<bookno>1</bookno> 
+<bookname>JAVA</bookname> 
+<authorname> Balguru Swami</authorname> 
+<price>250</price> 
+<year>2006</year> 
+</book> 
+<book> 
+<bookno>2</bookno> 
+<bookname>C</bookname> 
+<authorname> Deni Ritchie </authorname> 
+<price>500</price> 
+<year>1971</year> 
+</book> 
+</BookInfo>
+short and easy without skipping any line
+
+Here is a short, complete PHP script to generate XML file (nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create XML</title>
+</head>
+<body>
+
+<?php
+// Create XML object
+$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><BookInfo></BookInfo>');
+
+// First book
+$book1 = $xml->addChild('book');
+$book1->addChild('bookno', '1');
+$book1->addChild('bookname', 'JAVA');
+$book1->addChild('authorname', 'Balguru Swami');
+$book1->addChild('price', '250');
+$book1->addChild('year', '2006');
+
+// Second book
+$book2 = $xml->addChild('book');
+$book2->addChild('bookno', '2');
+$book2->addChild('bookname', 'C');
+$book2->addChild('authorname', 'Deni Ritchie');
+$book2->addChild('price', '500');
+$book2->addChild('year', '1971');
+
+// Save XML file
+$xml->asXML("books.xml");
+
+echo "XML file created successfully";
+?>
+
+</body>
+</html>
+Quick understanding:
+SimpleXMLElement → creates XML structure
+
+addChild() → adds tags
+
+asXML("books.xml") → saves file
+
+If you want, I can also give display XML in browser version or DOM method version (advanced).
+
+
+Q11. Write a PHP program to accept a filename from user. Display the last access time of the file.
+
+short and easy without skipping any line
+
+Here is a short, complete PHP self-processing program (nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Last Access Time</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Filename:
+    <input type="text" name="fname" required>
+    <input type="submit" name="submit" value="Check">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $file = $_POST['fname'];
+
+    // Check if file exists
+    if(file_exists($file))
+    {
+        $time = fileatime($file);
+        echo "<br>Last Access Time: " . date("d-m-Y H:i:s", $time);
+    }
+    else
+    {
+        echo "<br>File does not exist";
+    }
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+file_exists() → checks file
+
+fileatime() → gets last access time
+
+date() → formats output
+
+If you want, I can also give last modified time version (filemtime) or short exam-only code.
+
+
+Q12. Design HTML to accept a number from the user. Write PHP program to display factorial of 
+a number by using self-processing page.
+
+short and easy without skipping any line
+
+Here is a short, complete self-processing PHP program (HTML + PHP in one file, nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Factorial</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Number:
+    <input type="number" name="num" required>
+    <input type="submit" name="submit" value="Find">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $n = $_POST['num'];
+    $fact = 1;
+
+    for($i = 1; $i <= $n; $i++)
+    {
+        $fact = $fact * $i;
+    }
+
+    echo "<br>Factorial of $n is: " . $fact;
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+Loop multiplies from 1 to n
+
+Stores result in $fact
+
+Self-processing → same page handles form + logic
+
+If you want, I can also give recursive factorial version (theory marks) or ultra-short exam version.
+
+
+Q13. Create JSON Object and JSON schema for a Department. 
+Dept (dno, dname, dlocation) 
+
+short and easy without skipping any line
+
+Here is a short, clean answer with both JSON Object and JSON Schema (nothing skipped):
+
+1. JSON Object (Department)
+{
+  "dno": 1,
+  "dname": "Computer Science",
+  "dlocation": "Pune"
+}
+2. JSON Schema (Department)
+{
+  "type": "object",
+  "properties": {
+    "dno": {
+      "type": "integer"
+    },
+    "dname": {
+      "type": "string"
+    },
+    "dlocation": {
+      "type": "string"
+    }
+  },
+  "required": ["dno", "dname", "dlocation"]
+}
+Quick clarity:
+JSON Object → actual data
+
+JSON Schema → structure + validation
+
+If you want, I can also give a combined format or ultra-short version for exams.
+
+
+Q14. Write a PHP program which allows user to upload a file to the server from local drive. 
+Display size and type of the selected file.
+short and easy without skipping any line
+
+Here is a short, complete PHP file upload program (nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+</head>
+<body>
+
+<form method="post" enctype="multipart/form-data">
+    Select File:
+    <input type="file" name="file" required>
+    <input type="submit" name="submit" value="Upload">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $name = $_FILES['file']['name'];
+    $type = $_FILES['file']['type'];
+    $size = $_FILES['file']['size'];
+    $tmp  = $_FILES['file']['tmp_name'];
+
+    // Move file to server folder
+    move_uploaded_file($tmp, $name);
+
+    echo "<br>File Name: " . $name;
+    echo "<br>File Type: " . $type;
+    echo "<br>File Size: " . $size . " bytes";
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+enctype="multipart/form-data" → required for upload
+
+$_FILES → holds file details
+
+move_uploaded_file() → saves file on server
+
+If you want, I can also add file type validation (important for exams) or upload to specific folder version.
+
+
+Q15. Design HTML to accept a number from the user. Write PHP program to display factors of a 
+number by using self-processing page. 
+
+short and easy without skipping any line
+
+
+Here is a short, complete self-processing PHP program (HTML + PHP in one file, nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Factors of Number</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Number:
+    <input type="number" name="num" required>
+    <input type="submit" name="submit" value="Find">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $n = $_POST['num'];
+
+    echo "<br>Factors of $n are: ";
+
+    for($i = 1; $i <= $n; $i++)
+    {
+        if($n % $i == 0)
+        {
+            echo $i . " ";
+        }
+    }
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+Loop from 1 to n
+
+Check $n % $i == 0 → factor
+
+Self-processing → same page handles input + output
+
+If you want, I can also give optimized version (√n logic) or ultra-short exam version.
+
+
+Q16. Write a script to create XML file named “Item.xml” 
+<Product> 
+<ProductName>............................................................. </ProductName> 
+<ProductPrice> ................................................................</ProductPrice> 
+<Quantity>....................................................................</Quantity> 
+</Product> 
+Store the details of 5 Products of different Types 
+Link “ Product. xml” file to the CSS style sheet and get well formatted output as given below 
+ProductName : 
+color : red; 
+font-family : copperplate Gothic Light; font-size : 16pt; 
+font :bold;. 
+
+short and easy without skipping any line
+
+Here is a short, complete solution (PHP to create XML + CSS file, nothing skipped):
+
+1. PHP Script (create Item.xml)
+<?php
+// Create XML
+$xml = new SimpleXMLElement('<?xml version="1.0"?><Products></Products>');
+
+// Add 5 products
+for($i = 1; $i <= 5; $i++)
+{
+    $p = $xml->addChild('Product');
+    $p->addChild('ProductName', 'Product'.$i);
+    $p->addChild('ProductPrice', rand(100,500));
+    $p->addChild('Quantity', rand(1,10));
+}
+
+// Add CSS link
+$dom = dom_import_simplexml($xml)->ownerDocument;
+$dom->insertBefore(
+    $dom->createProcessingInstruction('xml-stylesheet', 'type="text/css" href="style.css"'),
+    $dom->firstChild
+);
+
+// Save file
+$xml->asXML("Item.xml");
+
+echo "Item.xml created successfully";
+?>
+2. CSS File (style.css)
+ProductName {
+    display: block;
+    color: red;
+    font-family: "Copperplate Gothic Light";
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+ProductPrice, Quantity {
+    display: block;
+    margin-left: 20px;
+}
+Quick understanding:
+PHP → creates XML with 5 products
+
+xml-stylesheet → links CSS
+
+CSS → formats XML display
+
+If you want, I can also give fixed values instead of random (exam-friendly) or exact output matching format screenshot style.
+
+
+Q17. Create JSON Object for Pizza. 
+Pizza (Pizzaname String, Base String, Toppings Array containing list of items, spicy 
+Boolean, veg Boolean) 
+Create Array of Object for storing details of 3 Pizzas.
+
+short and easy without skipping any line
+
+Here is a short, clean JSON Array of 3 Pizza Objects (nothing skipped):
+
+JSON Object (Array of Pizzas)
+[
+  {
+    "Pizzaname": "Margherita",
+    "Base": "Thin Crust",
+    "Toppings": ["Cheese", "Tomato"],
+    "spicy": false,
+    "veg": true
+  },
+  {
+    "Pizzaname": "Pepperoni",
+    "Base": "Thick Crust",
+    "Toppings": ["Pepperoni", "Cheese"],
+    "spicy": true,
+    "veg": false
+  },
+  {
+    "Pizzaname": "Veggie Delight",
+    "Base": "Cheese Burst",
+    "Toppings": ["Capsicum", "Onion", "Corn"],
+    "spicy": false,
+    "veg": true
+  }
+]
+Quick understanding:
+Array [] → stores multiple pizza objects
+
+Toppings → array inside object
+
+spicy, veg → boolean values
+
+If you want, I can also give JSON Schema for this or PHP decode/display version.
+
+
+Q18. Write a HTML to accept username. Set the username into Cookie for 1 hour.
+short and easy without skipping any line
+
+
+Here is a short, complete self-processing PHP program to set cookie (nothing skipped):
+
+<?php
+if(isset($_POST['submit']))
+{
+    $user = $_POST['uname'];
+
+    // Set cookie for 1 hour (3600 seconds)
+    setcookie("username", $user, time() + 3600);
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Set Cookie</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Username:
+    <input type="text" name="uname" required>
+    <input type="submit" name="submit" value="Save">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    echo "<br>Cookie set for 1 hour";
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+setcookie(name, value, expiry)
+
+time() + 3600 → 1 hour
+
+Cookie must be set before HTML output
+
+If you want, I can also give code to read/display cookie (often asked together).
+
+
+Q19. Write a PHP program to read the contents of file using fread() function
+short and easy without skipping any line
+
+Here is a short, complete PHP program using fread() (nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Read File</title>
+</head>
+<body>
+
+<?php
+$file = "test.txt";
+
+// Check if file exists
+if(file_exists($file))
+{
+    $fp = fopen($file, "r");
+    $size = filesize($file);
+
+    $content = fread($fp, $size);
+
+    fclose($fp);
+
+    echo "File Content:<br>" . $content;
+}
+else
+{
+    echo "File does not exist";
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+fopen() → open file
+
+filesize() → get size
+
+fread() → read content
+
+fclose() → close file
+
+If you want, I can also give user input filename version or line-by-line reading (fgets) version.
+
+
+Q20. Design HTML to accept a number from the user. Write PHP program to check whether given 
+number is perfect or not by using the self-processing page.
+short and easy without skipping any line
+
+Here is a short, complete self-processing PHP program (HTML + PHP in one file, nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfect Number</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Number:
+    <input type="number" name="num" required>
+    <input type="submit" name="submit" value="Check">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $n = $_POST['num'];
+    $sum = 0;
+
+    for($i = 1; $i < $n; $i++)
+    {
+        if($n % $i == 0)
+        {
+            $sum = $sum + $i;
+        }
+    }
+
+    if($sum == $n)
+    {
+        echo "<br>$n is a Perfect Number";
+    }
+    else
+    {
+        echo "<br>$n is Not a Perfect Number";
+    }
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+Add all factors except number itself
+
+If sum = number → Perfect Number
+
+Example: 6 → 1+2+3 = 6
+
+If you want, I can also give optimized version (√n) or very short exam-only code.
+
+
+Q21. Write PHP program to accept a filename from user. Check whether file exist or not. If it  
+exist then its size and last modified time. 
+short and easy without skipping any line
+
+Here is a short, complete self-processing PHP program (nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Info</title>
+</head>
+<body>
+
+<form method="post">
+    Enter Filename:
+    <input type="text" name="fname" required>
+    <input type="submit" name="submit" value="Check">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $file = $_POST['fname'];
+
+    // Check if file exists
+    if(file_exists($file))
+    {
+        $size = filesize($file);
+        $time = filemtime($file);
+
+        echo "<br>File exists";
+        echo "<br>File Size: " . $size . " bytes";
+        echo "<br>Last Modified: " . date("d-m-Y H:i:s", $time);
+    }
+    else
+    {
+        echo "<br>File does not exist";
+    }
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+file_exists() → check file
+
+filesize() → get size
+
+filemtime() → last modified time
+
+date() → format time
+
+If you want, I can also give access time + modified time together version or ultra-short exam code.
+
+
+Q22. Write a PHP program which allows user to upload a file and display the  size and last    
+modified time of the selected file. 
+
+short and easy without skipping any line
+
+Here is a short, complete PHP file upload program (nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload File Info</title>
+</head>
+<body>
+
+<form method="post" enctype="multipart/form-data">
+    Select File:
+    <input type="file" name="file" required>
+    <input type="submit" name="submit" value="Upload">
+</form>
+
+<?php
+if(isset($_POST['submit']))
+{
+    $name = $_FILES['file']['name'];
+    $tmp  = $_FILES['file']['tmp_name'];
+    $size = $_FILES['file']['size'];
+
+    // Move file to server
+    move_uploaded_file($tmp, $name);
+
+    // Get last modified time
+    $time = filemtime($name);
+
+    echo "<br>File Name: " . $name;
+    echo "<br>File Size: " . $size . " bytes";
+    echo "<br>Last Modified: " . date("d-m-Y H:i:s", $time);
+}
+?>
+
+</body>
+</html>
+Quick understanding:
+$_FILES → file details
+
+move_uploaded_file() → saves file
+
+filesize → size (from $_FILES)
+
+filemtime() → last modified time
+
+If you want, I can also give secure version (file type validation + folder upload) or ultra-short exam version.
+
+
+Q23. Create JSON Object and JSON schema for a Project. 
+Project (pno, pname, pduration, pbudget)   
+
+short and easy without skipping any line
+
+Here is a short, clean answer with both JSON Object and JSON Schema (nothing skipped):
+
+1. JSON Object (Project)
+{
+  "pno": 101,
+  "pname": "Website Development",
+  "pduration": "6 months",
+  "pbudget": 50000
+}
+2. JSON Schema (Project)
+{
+  "type": "object",
+  "properties": {
+    "pno": {
+      "type": "integer"
+    },
+    "pname": {
+      "type": "string"
+    },
+    "pduration": {
+      "type": "string"
+    },
+    "pbudget": {
+      "type": "number"
+    }
+  },
+  "required": ["pno", "pname", "pduration", "pbudget"]
+}
+Quick clarity:
+JSON Object → actual data
+
+JSON Schema → structure + validation rules
+
+If you want, I can also give array of projects version or with validation constraints (min/max, pattern).
+
+
+Q24. 2. Write a PHP script to generate an XML file in the following format in PHP 
+<NovelInfo> 
+<novel> 
+<novelno>1</novelno> 
+<novelname> Jane Eyre </novelname> 
+<authorname> Charlotte Bronte</authorname> 
+<price>250</price> 
+<year>2006</year> 
+</novel> 
+<novel> 
+<novelno>2</novelno> 
+<novelname> Frankenstein </novelname> 
+<authorname> Mary Shelley </authorname> 
+<price>500</price> 
+<year>1971</year>  
+</novel> 
+</NovelInfo>
+
+short and easy without skipping any line
+
+Here is a short, complete PHP script to generate XML file (nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Novel XML</title>
+</head>
+<body>
+
+<?php
+// Create XML
+$xml = new SimpleXMLElement('<?xml version="1.0"?><NovelInfo></NovelInfo>');
+
+// First novel
+$n1 = $xml->addChild('novel');
+$n1->addChild('novelno', '1');
+$n1->addChild('novelname', 'Jane Eyre');
+$n1->addChild('authorname', 'Charlotte Bronte');
+$n1->addChild('price', '250');
+$n1->addChild('year', '2006');
+
+// Second novel
+$n2 = $xml->addChild('novel');
+$n2->addChild('novelno', '2');
+$n2->addChild('novelname', 'Frankenstein');
+$n2->addChild('authorname', 'Mary Shelley');
+$n2->addChild('price', '500');
+$n2->addChild('year', '1971');
+
+// Save XML file
+$xml->asXML("novel.xml");
+
+echo "XML file created successfully";
+?>
+
+</body>
+</html>
+Quick understanding:
+SimpleXMLElement → create XML
+
+addChild() → add tags
+
+asXML("novel.xml") → save file
+
+If you want, I can also give CSS styling version (like Q16) or display XML in browser.
+
+
+Q25. Write PHP program to display server information.
+
+
+short and easy without skipping any line
+
+Here is a short, complete PHP program to display server information (nothing skipped):
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Info</title>
+</head>
+<body>
+
+<?php
+echo "Server Name: " . $_SERVER['SERVER_NAME'] . "<br>";
+echo "Server Software: " . $_SERVER['SERVER_SOFTWARE'] . "<br>";
+echo "Server Protocol: " . $_SERVER['SERVER_PROTOCOL'] . "<br>";
+echo "Server Port: " . $_SERVER['SERVER_PORT'] . "<br>";
+echo "Request Method: " . $_SERVER['REQUEST_METHOD'] . "<br>";
+echo "Remote Address: " . $_SERVER['REMOTE_ADDR'];
+?>
+
+</body>
+</html>
+Quick understanding:
+$_SERVER → superglobal array
+
+Gives server + request details
+
+If you want, I can also give phpinfo() version (full details) or ultra-short exam code.
+
+
+
+
