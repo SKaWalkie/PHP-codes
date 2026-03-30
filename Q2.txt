@@ -1,0 +1,1424 @@
+
+
+
+Q1. Write a program to read a flat file “student.dat”, calculate the percentage and display the data 
+from file in tabular format. (Student.dat file contains rollno, name, marks of OS, WT, DS, 
+Python)
+
+short and easy without skipping any line
+
+Here is a short, complete Java program (with all required lines, no skipping):
+
+import java.io.*;
+
+class StudentFile {
+    public static void main(String args[]) throws Exception {
+
+        FileInputStream fin = new FileInputStream("student.dat");
+        DataInputStream din = new DataInputStream(fin);
+
+        System.out.println("RollNo\tName\tOS\tWT\tDS\tPython\tPercentage");
+
+        try {
+            while (true) {
+                int roll = din.readInt();
+                String name = din.readUTF();
+                int os = din.readInt();
+                int wt = din.readInt();
+                int ds = din.readInt();
+                int py = din.readInt();
+
+                double per = (os + wt + ds + py) / 4.0;
+
+                System.out.println(roll + "\t" + name + "\t" + os + "\t" + wt + "\t" + ds + "\t" + py + "\t" + per);
+            }
+        } catch (EOFException e) {
+            din.close();
+        }
+    }
+}
+Notes (important for exam):
+File must contain data in same order:
+rollno, name, OS, WT, DS, Python
+
+Uses DataInputStream to read flat file
+
+EOFException is used to stop reading
+
+Percentage = average of 4 subjects
+
+If you want, I can also give the program to create student.dat file (very useful for exams).
+
+
+Q2. Design the Item table in PostgreSQL Item (id, name, price, rating). 
+Write PHP program to display the details of Item table in tabular format.
+
+short and easy without skipping any line
+
+Here is a short, complete solution (no lines skipped):
+
+1. PostgreSQL Table Design
+CREATE TABLE Item (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    price NUMERIC(10,2),
+    rating NUMERIC(2,1)
+);
+2. PHP Program to Display Data
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+$query = "SELECT * FROM Item";
+$result = pg_query($conn, $query);
+
+echo "<table border=1>";
+echo "<tr><th>ID</th><th>Name</th><th>Price</th><th>Rating</th></tr>";
+
+while($row = pg_fetch_assoc($result)) {
+    echo "<tr>";
+    echo "<td>".$row['id']."</td>";
+    echo "<td>".$row['name']."</td>";
+    echo "<td>".$row['price']."</td>";
+    echo "<td>".$row['rating']."</td>";
+    echo "</tr>";
+}
+
+echo "</table>";
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+Uses pg_connect() for PostgreSQL connection
+
+Uses pg_query() to fetch data
+
+pg_fetch_assoc() to display row-wise
+
+HTML <table> used for tabular format
+
+If you want, I can give a universal template where you just change table name and fields (very useful for exams).
+
+
+Q3. Write a menu driven program to perform various file operations. Accept filename from 
+user. 
+a) Display type of file. 
+b) Display last modification time of file. 
+c) Display the size of file.
+
+short and easy without skipping any line
+
+Here is a short and complete Java program (menu-driven, no lines skipped):
+
+import java.io.*;
+import java.util.*;
+
+class FileOperations {
+    public static void main(String args[]) {
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter file name: ");
+        String fname = sc.nextLine();
+
+        File f = new File(fname);
+
+        if(!f.exists()) {
+            System.out.println("File does not exist");
+            return;
+        }
+
+        int ch;
+        do {
+            System.out.println("\n1. Display type of file");
+            System.out.println("2. Display last modification time");
+            System.out.println("3. Display file size");
+            System.out.println("4. Exit");
+            System.out.print("Enter choice: ");
+            ch = sc.nextInt();
+
+            switch(ch) {
+                case 1:
+                    if(f.isFile())
+                        System.out.println("It is a normal file");
+                    else if(f.isDirectory())
+                        System.out.println("It is a directory");
+                    break;
+
+                case 2:
+                    System.out.println("Last Modified: " + new Date(f.lastModified()));
+                    break;
+
+                case 3:
+                    System.out.println("File Size: " + f.length() + " bytes");
+                    break;
+
+                case 4:
+                    System.out.println("Exit");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice");
+            }
+
+        } while(ch != 4);
+
+    }
+}
+Exam Points
+File class used
+
+isFile() / isDirectory() → file type
+
+lastModified() → time
+
+length() → size
+
+Menu using do-while
+
+If you want, I can convert this into a universal template for all file programs so you don’t have to memorize multiple codes.
+
+
+Q4. Write AJAX program to read a text file and display the contents of the file when the user 
+clicks on the “Display” button. 
+short and easy without skipping any line
+
+
+
+Here is a short and complete AJAX program (no lines skipped):
+
+1. HTML + AJAX
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function loadFile() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("data").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("GET", "data.txt", true);
+    xhttp.send();
+}
+</script>
+</head>
+
+<body>
+
+<button onclick="loadFile()">Display</button>
+
+<div id="data"></div>
+
+</body>
+</html>
+2. Text File (data.txt)
+This is sample text file.
+Hello AJAX!
+Key Points (for exam)
+XMLHttpRequest() used for AJAX
+
+readyState == 4 and status == 200 → success
+
+responseText → file content
+
+Button triggers function
+
+This is the standard shortest correct answer usually expected in exams.
+
+
+Q5. Write a PHP program to read two file names from user and append content of first file into 
+second file.
+short and easy without skipping any line
+
+Here is a short and complete PHP program (no lines skipped):
+
+<?php
+
+echo "Enter first file name: ";
+$f1 = trim(fgets(STDIN));
+
+echo "Enter second file name: ";
+$f2 = trim(fgets(STDIN));
+
+if(!file_exists($f1)) {
+    echo "First file does not exist";
+    exit;
+}
+
+$data = file_get_contents($f1);
+
+$file = fopen($f2, "a");
+
+fwrite($file, $data);
+
+fclose($file);
+
+echo "Content appended successfully";
+
+?>
+Key Points (for exam)
+fgets(STDIN) → take input from user
+
+file_get_contents() → read first file
+
+"a" mode → append to second file
+
+fwrite() → write data
+
+If you want, I can give a browser-based (HTML form) version too (sometimes asked instead of CLI).
+
+
+Q6. Create Emp table in PostgreSQL as (Eid, Ename, Salary). Write a PHP program to accept 
+salary from user. Get the details of Employees from database whose salary is greater than 
+accepted salary.      
+
+short and easy without skipping any line
+
+Here is a short and complete solution (no lines skipped):
+
+1. PostgreSQL Table
+CREATE TABLE Emp (
+    Eid SERIAL PRIMARY KEY,
+    Ename VARCHAR(50),
+    Salary NUMERIC(10,2)
+);
+2. PHP Program
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+echo "Enter Salary: ";
+$sal = trim(fgets(STDIN));
+
+$query = "SELECT * FROM Emp WHERE Salary > $sal";
+$result = pg_query($conn, $query);
+
+echo "Eid\tEname\tSalary\n";
+
+while($row = pg_fetch_assoc($result)) {
+    echo $row['eid']."\t".$row['ename']."\t".$row['salary']."\n";
+}
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+pg_connect() → connect PostgreSQL
+
+fgets(STDIN) → user input
+
+WHERE Salary > value → condition
+
+pg_fetch_assoc() → fetch rows
+
+If you want, I can give a universal PHP + PostgreSQL template for all database questions so you just change table/condition.
+
+
+Q7. Design HTML page to accept username, age, emailid. On “Submit” display details on same 
+page using PHP. by using self processing page and sticky forms  
+
+short and easy without skipping any line
+
+Here is a short and complete self-processing PHP form with sticky values (no lines skipped):
+
+<?php
+$username = "";
+$age = "";
+$email = "";
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $age = $_POST["age"];
+    $email = $_POST["email"];
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<form method="post" action="">
+    Username: <input type="text" name="username" value="<?php echo $username; ?>"><br><br>
+    Age: <input type="number" name="age" value="<?php echo $age; ?>"><br><br>
+    Email: <input type="email" name="email" value="<?php echo $email; ?>"><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+<?php
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    echo "<h3>Entered Details:</h3>";
+    echo "Username: ".$username."<br>";
+    echo "Age: ".$age."<br>";
+    echo "Email: ".$email."<br>";
+}
+?>
+
+</body>
+</html>
+Key Points (for exam)
+Same page used → action="" (self-processing)
+
+Sticky form → value="<?php echo $var; ?>"
+
+$_POST used to get values
+
+Data displayed after submit
+
+If you want, I can give a universal sticky form template usable for any question (just change fields).
+
+
+Q8. Write a script to create XML file named “Item.xml” 
+<Item> 
+<ItemName>............................................................. </ItemName> 
+<ItemPrice> ................................................................</ItemPrice> 
+<Quantity>....................................................................</Quantity> 
+</Item> 
+Store the details of 5 Items of different Types 
+Link “ Item. xml” file to the CSS style sheet and get well formatted output as given below 
+i. ItemName : 
+color : red; 
+font-family : copperplate Gothic Light; font-size : 16pt; 
+font :bold; 
+ii. ItemPrice and Quantity 
+color:yellow; 
+font-family:Arial; 
+font-size:12 pt; 
+font:bold; 
+
+short and easy without skipping any line
+
+Here is a short and complete solution (XML + CSS, no lines skipped):
+
+1. XML File (Item.xml)
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/css" href="style.css"?>
+
+<Items>
+
+<Item>
+<ItemName>Pen</ItemName>
+<ItemPrice>10</ItemPrice>
+<Quantity>50</Quantity>
+</Item>
+
+<Item>
+<ItemName>Notebook</ItemName>
+<ItemPrice>50</ItemPrice>
+<Quantity>30</Quantity>
+</Item>
+
+<Item>
+<ItemName>Pencil</ItemName>
+<ItemPrice>5</ItemPrice>
+<Quantity>100</Quantity>
+</Item>
+
+<Item>
+<ItemName>Eraser</ItemName>
+<ItemPrice>3</ItemPrice>
+<Quantity>80</Quantity>
+</Item>
+
+<Item>
+<ItemName>Scale</ItemName>
+<ItemPrice>15</ItemPrice>
+<Quantity>40</Quantity>
+</Item>
+
+</Items>
+2. CSS File (style.css)
+ItemName {
+    display: block;
+    color: red;
+    font-family: "Copperplate Gothic Light";
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+ItemPrice, Quantity {
+    display: block;
+    color: yellow;
+    font-family: Arial;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+Item {
+    display: block;
+    margin-bottom: 10px;
+    background-color: black;
+    padding: 10px;
+}
+Key Points (for exam)
+<?xml-stylesheet ...?> → link CSS
+
+Custom XML tags styled using CSS
+
+display: block → each field on new line
+
+Multiple items stored inside <Items>
+
+This is the standard exam-perfect format.
+
+
+Q9. Write PHP program to keep track of number of times user has visited the page. For the first 
+time display “Welcome, You have visited for first time” message. For next requests display 
+number of times user has visited the page. [Use Cookies] 
+
+short and easy without skipping any line
+
+Here is a short and complete PHP program using Cookies (no lines skipped):
+
+<?php
+
+if(isset($_COOKIE['count'])) {
+    $count = $_COOKIE['count'] + 1;
+    setcookie("count", $count);
+    echo "You have visited this page ".$count." times";
+} else {
+    setcookie("count", 1);
+    echo "Welcome, You have visited for first time";
+}
+
+?>
+Key Points (for exam)
+$_COOKIE → read cookie
+
+setcookie() → store/update value
+
+First visit → cookie not set
+
+Next visits → increment count
+
+This is the shortest correct answer expected in exams.
+
+
+Q10. Write a PHP script to accept a string and then display each word of string in reverse  
+order by using self-processing form 
+
+
+short and easy without skipping any line
+
+Here is a short and complete self-processing PHP program (no lines skipped):
+
+<?php
+$str = "";
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $str = $_POST["text"];
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<form method="post" action="">
+    Enter String: <input type="text" name="text" value="<?php echo $str; ?>">
+    <input type="submit" value="Submit">
+</form>
+
+<?php
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+    $words = explode(" ", $str);
+    $words = array_reverse($words);
+    echo "Reversed Order: ";
+    foreach($words as $w) {
+        echo $w." ";
+    }
+}
+?>
+
+</body>
+</html>
+Key Points (for exam)
+Self-processing → action=""
+
+Sticky form → value retains input
+
+explode() → split words
+
+array_reverse() → reverse order
+
+foreach → display words
+
+This is the standard short exam answer.
+
+
+Q11. Design the Movie table in PostgreSQL. Movie (id, mname, release_year, rating) 
+Write PHP program to display name of the highest rating Movie.
+
+short and easy without skipping any line
+
+Here is a short and complete solution (no lines skipped):
+
+1. PostgreSQL Table
+CREATE TABLE Movie (
+    id SERIAL PRIMARY KEY,
+    mname VARCHAR(50),
+    release_year INT,
+    rating NUMERIC(2,1)
+);
+2. PHP Program
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+$query = "SELECT mname FROM Movie WHERE rating = (SELECT MAX(rating) FROM Movie)";
+$result = pg_query($conn, $query);
+
+echo "Highest Rated Movie:\n";
+
+while($row = pg_fetch_assoc($result)) {
+    echo $row['mname']."\n";
+}
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+MAX(rating) → highest rating
+
+Subquery used
+
+pg_fetch_assoc() → fetch result
+
+Displays only movie name
+
+This is the clean and exact exam answer.
+
+
+Q12. Design the following tables in PostgreSQL database. 
+Property (pno, description, area) 
+Owner (oname, address, phone) 
+An owner can have one or more properties, but a property belongs to exactly one owner. 
+Write PHP program to accept owner name from the user display all properties which are 
+owned by that owner. 
+
+short and easy without skipping any line
+
+Here is a short and complete solution (no lines skipped):
+
+1. PostgreSQL Tables
+CREATE TABLE Owner (
+    oname VARCHAR(50) PRIMARY KEY,
+    address VARCHAR(100),
+    phone VARCHAR(15)
+);
+
+CREATE TABLE Property (
+    pno SERIAL PRIMARY KEY,
+    description VARCHAR(100),
+    area VARCHAR(50),
+    oname VARCHAR(50),
+    FOREIGN KEY (oname) REFERENCES Owner(oname)
+);
+2. PHP Program
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+echo "Enter Owner Name: ";
+$name = trim(fgets(STDIN));
+
+$query = "SELECT * FROM Property WHERE oname = '$name'";
+$result = pg_query($conn, $query);
+
+echo "Pno\tDescription\tArea\n";
+
+while($row = pg_fetch_assoc($result)) {
+    echo $row['pno']."\t".$row['description']."\t".$row['area']."\n";
+}
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+One-to-many relation → Owner → Property
+
+Foreign key → oname
+
+WHERE oname = value → filter
+
+Displays all properties of given owner
+
+This is the exact short exam-ready answer.
+
+
+Q13. Write a PHP script to accept username and password. If in the first three chances, 
+username and password entered is correct then display second form with “Welcome 
+message” otherwise display error message. [Use Session]
+
+short and easy without skipping any line
+
+Here is a short and complete PHP program using Session (no lines skipped):
+
+<?php
+session_start();
+
+$valid_user = "admin";
+$valid_pass = "1234";
+
+if(!isset($_SESSION['count'])) {
+    $_SESSION['count'] = 0;
+}
+
+if(isset($_POST['login'])) {
+
+    $user = $_POST['username'];
+    $pass = $_POST['password'];
+
+    if($user == $valid_user && $pass == $valid_pass) {
+        echo "<h3>Welcome ".$user."</h3>";
+        echo "<form><input type='text' placeholder='Second Form'></form>";
+        session_destroy();
+    } else {
+        $_SESSION['count']++;
+
+        if($_SESSION['count'] >= 3) {
+            echo "Maximum attempts reached";
+            session_destroy();
+        } else {
+            echo "Invalid Username or Password";
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<form method="post">
+    Username: <input type="text" name="username"><br><br>
+    Password: <input type="password" name="password"><br><br>
+    <input type="submit" name="login" value="Login">
+</form>
+
+</body>
+</html>
+Key Points (for exam)
+session_start() required
+
+$_SESSION['count'] → track attempts
+
+Max 3 attempts allowed
+
+Correct login → show second form
+
+Wrong login → error message
+
+This is the shortest clean session-based solution expected in exams.
+
+
+Q14. Write PHP program to display last access time of the page on revising the page. For the first 
+time display “Welcome, You have visited for first time” message. For next requests display 
+last access time of the page. [Use Cookies] 
+
+short and easy without skipping any line
+
+Here is a short and complete PHP program using Cookies (no lines skipped):
+
+<?php
+
+if(isset($_COOKIE['lastvisit'])) {
+    echo "Last access time: ".$_COOKIE['lastvisit'];
+    setcookie("lastvisit", date("d-m-Y H:i:s"));
+} else {
+    echo "Welcome, You have visited for first time";
+    setcookie("lastvisit", date("d-m-Y H:i:s"));
+}
+
+?>
+Key Points (for exam)
+$_COOKIE → read previous visit time
+
+setcookie() → update current visit time
+
+First visit → no cookie → show welcome
+
+Next visits → show last access time
+
+This is the standard short exam answer.
+
+
+
+Q15. Create the following tables PostgreSQL. 
+Doctor (doc_no, dname, address, city, area) 
+Hospital (hosp_no, hname, hcity) Doctor-Hospital related with many-one relationship. 
+Create a RDB in 3NF for above and solve the following. 
+Write a script in PHP to print the Doctor visiting to the Hospital in tabular format. Accept 
+hospital name from user. 
+
+short and easy without skipping any line
+
+Here is a short and complete solution (no lines skipped):
+
+1. PostgreSQL Tables (3NF)
+CREATE TABLE Hospital (
+    hosp_no SERIAL PRIMARY KEY,
+    hname VARCHAR(50),
+    hcity VARCHAR(50)
+);
+
+CREATE TABLE Doctor (
+    doc_no SERIAL PRIMARY KEY,
+    dname VARCHAR(50),
+    address VARCHAR(100),
+    city VARCHAR(50),
+    area VARCHAR(50),
+    hosp_no INT,
+    FOREIGN KEY (hosp_no) REFERENCES Hospital(hosp_no)
+);
+2. PHP Program
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+echo "Enter Hospital Name: ";
+$name = trim(fgets(STDIN));
+
+$query = "SELECT d.doc_no, d.dname, d.city 
+          FROM Doctor d, Hospital h 
+          WHERE d.hosp_no = h.hosp_no AND h.hname = '$name'";
+
+$result = pg_query($conn, $query);
+
+echo "DocNo\tDname\tCity\n";
+
+while($row = pg_fetch_assoc($result)) {
+    echo $row['doc_no']."\t".$row['dname']."\t".$row['city']."\n";
+}
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+Many-to-one → Doctor → Hospital
+
+Foreign key → hosp_no
+
+Join used to match hospital name
+
+Displays doctors visiting given hospital
+
+This is the exact short exam-ready answer.
+
+
+Q16. Create following tables in PostgreSQL. 
+Emp (eno, ename, edesignation, esalary) 
+Dept (dno, dname, dlocation) 
+There exists a one-to-many relationship between Dept and Emp. 
+[10 Marks] 
+Design HTML to accept department name from the user. Write a PHP script which will 
+display count of the employees working in that department. 
+
+
+short and easy without skipping any line
+
+Here is a short and complete solution (no lines skipped):
+
+1. PostgreSQL Tables
+CREATE TABLE Dept (
+    dno SERIAL PRIMARY KEY,
+    dname VARCHAR(50),
+    dlocation VARCHAR(50)
+);
+
+CREATE TABLE Emp (
+    eno SERIAL PRIMARY KEY,
+    ename VARCHAR(50),
+    edesignation VARCHAR(50),
+    esalary NUMERIC(10,2),
+    dno INT,
+    FOREIGN KEY (dno) REFERENCES Dept(dno)
+);
+2. HTML + PHP (Self-processing)
+<?php
+$count = "";
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+    if(!$conn) {
+        echo "Connection Failed";
+        exit;
+    }
+
+    $dname = $_POST['dname'];
+
+    $query = "SELECT COUNT(*) FROM Emp e, Dept d 
+              WHERE e.dno = d.dno AND d.dname = '$dname'";
+
+    $result = pg_query($conn, $query);
+
+    $row = pg_fetch_row($result);
+    $count = $row[0];
+
+    pg_close($conn);
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<form method="post" action="">
+    Enter Department Name: 
+    <input type="text" name="dname">
+    <input type="submit" value="Submit">
+</form>
+
+<?php
+if($count !== "") {
+    echo "Number of Employees: ".$count;
+}
+?>
+
+</body>
+</html>
+Key Points (for exam)
+One-to-many → Dept → Emp
+
+Foreign key → dno
+
+COUNT(*) used
+
+Join used to match department name
+
+Self-processing form
+
+This is the clean and exact exam answer.
+
+
+Q17. Write AJAX program to display button as “Get Details”. On click of it show Teacher 
+information from PostgreSQL table “Teacher”. Teacher (Tno, Name, Subject, Research area)
+
+short and easy without skipping any line
+
+Here is a short and complete AJAX + PHP + PostgreSQL solution (no lines skipped):
+
+1. HTML + AJAX (index.html)
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function getData() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            document.getElementById("data").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("GET", "fetch.php", true);
+    xhttp.send();
+}
+</script>
+</head>
+
+<body>
+
+<button onclick="getData()">Get Details</button>
+
+<div id="data"></div>
+
+</body>
+</html>
+2. PHP File (fetch.php)
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+$query = "SELECT * FROM Teacher";
+$result = pg_query($conn, $query);
+
+echo "<table border=1>";
+echo "<tr><th>Tno</th><th>Name</th><th>Subject</th><th>Research Area</th></tr>";
+
+while($row = pg_fetch_assoc($result)) {
+    echo "<tr>";
+    echo "<td>".$row['tno']."</td>";
+    echo "<td>".$row['name']."</td>";
+    echo "<td>".$row['subject']."</td>";
+    echo "<td>".$row['research area']."</td>";
+    echo "</tr>";
+}
+
+echo "</table>";
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+AJAX → XMLHttpRequest()
+
+Button triggers request
+
+PHP fetches data from PostgreSQL
+
+Data displayed in HTML table
+
+This is the standard short exam-ready answer.
+
+
+Q18. Write a PHP program which allows user to upload a file to the server. Design HTML which 
+allows user to select file from local drive.
+
+short and easy without skipping any line
+
+Here is a short and complete PHP file upload program (no lines skipped):
+
+1. HTML + PHP (upload.php)
+<?php
+
+if(isset($_POST['upload'])) {
+
+    $filename = $_FILES['file']['name'];
+    $tempname = $_FILES['file']['tmp_name'];
+
+    move_uploaded_file($tempname, "uploads/".$filename);
+
+    echo "File Uploaded Successfully";
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<form method="post" enctype="multipart/form-data">
+    Select File: <input type="file" name="file"><br><br>
+    <input type="submit" name="upload" value="Upload">
+</form>
+
+</body>
+</html>
+Key Points (for exam)
+enctype="multipart/form-data" required
+
+$_FILES used for file upload
+
+move_uploaded_file() → store file
+
+"uploads/" folder must exist
+
+This is the shortest correct exam answer.
+
+
+Q19. Create Route table (route_no, source, destination, no_of_stations) in database. Write  
+PHP program to accept route_no from user and display the route details from the database. 
+
+short and easy without skipping any line
+
+Here is a short and complete solution (no lines skipped):
+
+1. PostgreSQL Table
+CREATE TABLE Route (
+    route_no SERIAL PRIMARY KEY,
+    source VARCHAR(50),
+    destination VARCHAR(50),
+    no_of_stations INT
+);
+2. PHP Program
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+echo "Enter Route No: ";
+$rno = trim(fgets(STDIN));
+
+$query = "SELECT * FROM Route WHERE route_no = $rno";
+$result = pg_query($conn, $query);
+
+echo "RouteNo\tSource\tDestination\tStations\n";
+
+while($row = pg_fetch_assoc($result)) {
+    echo $row['route_no']."\t".$row['source']."\t".$row['destination']."\t".$row['no_of_stations']."\n";
+}
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+WHERE route_no = value
+
+Uses pg_fetch_assoc()
+
+Displays all route details
+
+Simple select query
+
+This is the exact short exam-ready answer.
+
+
+Q20. Design HTML which contains “Get Details” button. On click on button display the rollno, 
+name and age of students using AJAX.  
+
+short and easy without skipping any line
+
+Here is a short and complete AJAX program (no lines skipped):
+
+1. HTML + AJAX (index.html)
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function getData() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            document.getElementById("data").innerHTML = this.responseText;
+        }
+    };
+    xhttp.open("GET", "data.php", true);
+    xhttp.send();
+}
+</script>
+</head>
+
+<body>
+
+<button onclick="getData()">Get Details</button>
+
+<div id="data"></div>
+
+</body>
+</html>
+2. PHP File (data.php)
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+$query = "SELECT rollno, name, age FROM Student";
+$result = pg_query($conn, $query);
+
+echo "<table border=1>";
+echo "<tr><th>RollNo</th><th>Name</th><th>Age</th></tr>";
+
+while($row = pg_fetch_assoc($result)) {
+    echo "<tr>";
+    echo "<td>".$row['rollno']."</td>";
+    echo "<td>".$row['name']."</td>";
+    echo "<td>".$row['age']."</td>";
+    echo "</tr>";
+}
+
+echo "</table>";
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+Button triggers AJAX call
+
+XMLHttpRequest() used
+
+PHP fetches database data
+
+Output displayed in table
+
+This is the standard short exam answer.
+
+
+Q21. Write PHP program to apply color setting for the page and text. Accept background and text 
+color from the 1st page. Display selected colors on the 2nd page the and for 3rd page apply 
+selected background and text color. [Use Cookie].
+
+short and easy without skipping any line
+
+Here is a short and complete PHP program using Cookies (3 pages) (no lines skipped):
+
+1. Page 1 (color1.php)
+<!DOCTYPE html>
+<html>
+<body>
+
+<form method="post" action="color2.php">
+    Background Color: <input type="text" name="bg"><br><br>
+    Text Color: <input type="text" name="text"><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>
+2. Page 2 (color2.php)
+<?php
+
+$bg = $_POST['bg'];
+$text = $_POST['text'];
+
+setcookie("bgcolor", $bg);
+setcookie("textcolor", $text);
+
+echo "Selected Background Color: ".$bg."<br>";
+echo "Selected Text Color: ".$text."<br>";
+
+echo "<a href='color3.php'>Go to Page 3</a>";
+
+?>
+3. Page 3 (color3.php)
+<?php
+
+$bg = $_COOKIE['bgcolor'];
+$text = $_COOKIE['textcolor'];
+
+?>
+
+<!DOCTYPE html>
+<html>
+<body style="background-color: <?php echo $bg; ?>; color: <?php echo $text; ?>;">
+
+<h2>This page uses selected colors</h2>
+
+</body>
+</html>
+Key Points (for exam)
+Page1 → accept input
+
+Page2 → store in cookies using setcookie()
+
+Page3 → apply using $_COOKIE
+
+Demonstrates cookie persistence
+
+This is the exact short exam-ready answer.
+
+
+Q22. Create the following tables PostgreSQL. 
+Doctor (doc_no, dname, address ,city ,area) 
+Hospital (hosp_no, hname, hcity) 
+Doctor-Hospital related with many-one relationship. 
+Create a RDB in 3NF for above and solve the following. 
+Write a script in PHP to print the number of Doctors visiting to the Hospital in tabular 
+format. Accept Hospital name from user.
+
+short and easy without skipping any line
+
+Here is a short and complete solution (no lines skipped):
+
+1. PostgreSQL Tables (3NF)
+CREATE TABLE Hospital (
+    hosp_no SERIAL PRIMARY KEY,
+    hname VARCHAR(50),
+    hcity VARCHAR(50)
+);
+
+CREATE TABLE Doctor (
+    doc_no SERIAL PRIMARY KEY,
+    dname VARCHAR(50),
+    address VARCHAR(100),
+    city VARCHAR(50),
+    area VARCHAR(50),
+    hosp_no INT,
+    FOREIGN KEY (hosp_no) REFERENCES Hospital(hosp_no)
+);
+2. PHP Program
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+echo "Enter Hospital Name: ";
+$name = trim(fgets(STDIN));
+
+$query = "SELECT COUNT(*) FROM Doctor d, Hospital h 
+          WHERE d.hosp_no = h.hosp_no AND h.hname = '$name'";
+
+$result = pg_query($conn, $query);
+
+$row = pg_fetch_row($result);
+
+echo "Number of Doctors: ".$row[0];
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+Many-to-one → Doctor → Hospital
+
+Foreign key → hosp_no
+
+COUNT(*) used
+
+Join used with hospital name
+
+This is the exact short exam-ready answer.
+
+
+Q23. Write PHP program to display the contents of file in upper case. 
+
+
+short and easy without skipping any line
+
+Here is a short and complete PHP program (no lines skipped):
+
+<?php
+
+echo "Enter file name: ";
+$fname = trim(fgets(STDIN));
+
+if(!file_exists($fname)) {
+    echo "File does not exist";
+    exit;
+}
+
+$content = file_get_contents($fname);
+
+$upper = strtoupper($content);
+
+echo "File Content in Upper Case:\n";
+echo $upper;
+
+?>
+Key Points (for exam)
+file_get_contents() → read file
+
+strtoupper() → convert to upper case
+
+file_exists() check
+
+Output displayed directly
+
+This is the shortest correct exam answer.
+
+
+Q24. Create Route table (route_no, source, destination, no_of_stations) in database. Write PHP 
+program to accept “source” from user and display the route details from the database. 
+
+short and easy without skipping any line
+
+Here is a short and complete solution (no lines skipped):
+
+1. PostgreSQL Table
+CREATE TABLE Route (
+    route_no SERIAL PRIMARY KEY,
+    source VARCHAR(50),
+    destination VARCHAR(50),
+    no_of_stations INT
+);
+2. PHP Program
+<?php
+
+$conn = pg_connect("host=localhost dbname=test user=postgres password=1234");
+
+if(!$conn) {
+    echo "Connection Failed";
+    exit;
+}
+
+echo "Enter Source: ";
+$src = trim(fgets(STDIN));
+
+$query = "SELECT * FROM Route WHERE source = '$src'";
+$result = pg_query($conn, $query);
+
+echo "RouteNo\tSource\tDestination\tStations\n";
+
+while($row = pg_fetch_assoc($result)) {
+    echo $row['route_no']."\t".$row['source']."\t".$row['destination']."\t".$row['no_of_stations']."\n";
+}
+
+pg_close($conn);
+
+?>
+Key Points (for exam)
+Condition → WHERE source = value
+
+Uses pg_fetch_assoc()
+
+Displays matching routes
+
+Simple select query
+
+This is the exact short exam-ready answer.
+
+
+Q25. Write a PHP program to read two file names from user and copy content of first file into 
+second file. 
+
+short and easy without skipping any line
+
+Here is a short and complete PHP program (no lines skipped):
+
+<?php
+
+echo "Enter first file name: ";
+$f1 = trim(fgets(STDIN));
+
+echo "Enter second file name: ";
+$f2 = trim(fgets(STDIN));
+
+if(!file_exists($f1)) {
+    echo "First file does not exist";
+    exit;
+}
+
+$data = file_get_contents($f1);
+
+file_put_contents($f2, $data);
+
+echo "Content copied successfully";
+
+?>
+Key Points (for exam)
+file_get_contents() → read file
+
+file_put_contents() → write file
+
+Overwrites second file
+
+Simple and shortest method
+
+This is the exact short exam answer.
+
+
+
+
