@@ -1,0 +1,98 @@
+🔴 UNIVERSAL START (write once for all DB questions)
+CREATE DATABASE test;
+\c test
+🔴 Q2 – Item
+CREATE TABLE Item(
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  price DOUBLE PRECISION,
+  rating INT
+);
+🔴 Q6 – Emp
+CREATE TABLE Emp(
+  Eid INT,
+  Ename VARCHAR(50),
+  Salary DOUBLE PRECISION
+);
+🔴 Q11 – Movie
+CREATE TABLE Movie(
+  id INT,
+  mname VARCHAR(50),
+  release_year INT,
+  rating INT
+);
+🔴 Q12 – Property + Owner
+CREATE TABLE Owner(
+  oname VARCHAR(50) PRIMARY KEY,
+  address VARCHAR(100),
+  phone VARCHAR(15)
+);
+
+CREATE TABLE Property(
+  pno INT,
+  description VARCHAR(100),
+  area DOUBLE PRECISION,
+  oname VARCHAR(50),
+  FOREIGN KEY(oname) REFERENCES Owner(oname)
+);
+🔴 Q15 – Doctor + Hospital
+CREATE TABLE Hospital(
+  hosp_no INT PRIMARY KEY,
+  hname VARCHAR(50),
+  hcity VARCHAR(50)
+);
+
+CREATE TABLE Doctor(
+  doc_no INT,
+  dname VARCHAR(50),
+  address VARCHAR(100),
+  city VARCHAR(50),
+  area VARCHAR(50),
+  hosp_no INT,
+  FOREIGN KEY(hosp_no) REFERENCES Hospital(hosp_no)
+);
+🔴 Q16 – Emp + Dept
+CREATE TABLE Dept(
+  dno INT PRIMARY KEY,
+  dname VARCHAR(50),
+  dlocation VARCHAR(50)
+);
+
+CREATE TABLE Emp(
+  eno INT,
+  ename VARCHAR(50),
+  edesignation VARCHAR(50),
+  esalary DOUBLE PRECISION,
+  dno INT,
+  FOREIGN KEY(dno) REFERENCES Dept(dno)
+);
+🔴 Q17 – Teacher
+CREATE TABLE Teacher(
+  Tno INT,
+  Name VARCHAR(50),
+  Subject VARCHAR(50),
+  Research_area VARCHAR(50)
+);
+🔴 Q19 & Q24 – Route
+CREATE TABLE Route(
+  route_no INT,
+  source VARCHAR(50),
+  destination VARCHAR(50),
+  no_of_stations INT
+);
+🔴 Q22 – Doctor + Hospital (same as Q15)
+
+👉 Use same tables as Q15
+
+🎯 FINAL SHORTCUT (VERY IMPORTANT)
+
+If you forget everything, just write:
+
+CREATE DATABASE test;
+\c test;
+
+CREATE TABLE TableName(
+  field1 datatype,
+  field2 datatype,
+  field3 datatype
+);
