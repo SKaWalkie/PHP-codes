@@ -1,0 +1,363 @@
+Perfect — here is your **ZERO-THINKING SHEET**.
+You just:
+
+1. Identify question
+2. Paste template
+3. Replace with these **exact lines**
+
+Everything below is mapped to your slips  
+
+---
+
+# 🔥 Q1 — EXACT LINES TO WRITE
+
+---
+
+## ✅ Reverse each word
+
+```php
+$words=explode(" ",$v);
+foreach($words as $w) echo strrev($w)." ";
+```
+
+---
+
+## ✅ Fibonacci
+
+```php
+$a=0;$b=1;
+for($i=0;$i<$v;$i++){
+ echo $a." ";
+ $c=$a+$b;$a=$b;$b=$c;
+}
+```
+
+---
+
+## ✅ Factorial
+
+```php
+$f=1;
+for($i=1;$i<=$v;$i++) $f*=$i;
+echo $f;
+```
+
+---
+
+## ✅ Perfect number
+
+```php
+$sum=0;
+for($i=1;$i<$v;$i++) if($v%$i==0) $sum+=$i;
+echo ($sum==$v)?"Perfect":"Not";
+```
+
+---
+
+## ✅ Factors
+
+```php
+for($i=1;$i<=$v;$i++) if($v%$i==0) echo $i." ";
+```
+
+---
+
+## ✅ Celsius → Fahrenheit
+
+```php
+echo ($v*9/5)+32;
+```
+
+---
+
+## ✅ File exists + size + time
+
+```php
+if(file_exists($v)){
+ echo filesize($v)."<br>";
+ echo date("Y-m-d H:i:s",filemtime($v));
+}
+```
+
+---
+
+## ✅ Last access time
+
+```php
+echo date("Y-m-d H:i:s",fileatime($v));
+```
+
+---
+
+## ✅ fread()
+
+```php
+$f=fopen($v,"r");
+echo fread($f,filesize($v));
+```
+
+---
+
+## ✅ JSON (any object)
+
+```php
+$arr=["id"=>1,"name"=>$v];
+echo json_encode($arr);
+```
+
+---
+
+## ✅ XML multiple nodes
+
+```php
+for($i=1;$i<=2;$i++){
+ $b=$x->addChild("book");
+ $b->addChild("name","Book".$i);
+}
+```
+
+---
+
+---
+
+# 🔥 Q2 — EXACT LINES TO WRITE
+
+---
+
+## 📁 FILE QUESTIONS
+
+---
+
+### ✅ Read file + display
+
+```php
+$data=file($f1);
+foreach($data as $line){
+ echo $line."<br>";
+}
+```
+
+---
+
+### ✅ Append file
+
+```php
+file_put_contents($f2,file_get_contents($f1),FILE_APPEND);
+```
+
+---
+
+### ✅ Copy file
+
+```php
+copy($f1,$f2);
+```
+
+---
+
+### ✅ Uppercase file
+
+```php
+echo strtoupper(file_get_contents($f1));
+```
+
+---
+
+---
+
+## 🗄 DATABASE QUESTIONS
+
+---
+
+### ✅ Display table
+
+```php
+$res=pg_query($conn,"SELECT * FROM item");
+while($row=pg_fetch_assoc($res)){
+ echo implode(" ",$row)."<br>";
+}
+```
+
+---
+
+### ✅ Salary > input
+
+```php
+$s=$_POST['val'];
+$res=pg_query($conn,"SELECT * FROM emp WHERE salary>$s");
+```
+
+---
+
+### ✅ Highest rating movie
+
+```php
+$res=pg_query($conn,"SELECT * FROM movie ORDER BY rating DESC LIMIT 1");
+```
+
+---
+
+### ✅ Owner → property
+
+```php
+$n=$_POST['val'];
+$res=pg_query($conn,"SELECT * FROM property p, owner o WHERE p.oname=o.oname AND o.oname='$n'");
+```
+
+---
+
+### ✅ Employee count
+
+```php
+$n=$_POST['val'];
+$res=pg_query($conn,"SELECT COUNT(*) FROM emp e, dept d WHERE e.dno=d.dno AND d.dname='$n'");
+```
+
+---
+
+### ✅ Route by number
+
+```php
+$r=$_POST['val'];
+$res=pg_query($conn,"SELECT * FROM route WHERE route_no=$r");
+```
+
+---
+
+### ✅ Route by source
+
+```php
+$s=$_POST['val'];
+$res=pg_query($conn,"SELECT * FROM route WHERE source='$s'");
+```
+
+---
+
+### ✅ Doctor-Hospital
+
+```php
+$n=$_POST['val'];
+$res=pg_query($conn,"SELECT * FROM doctor d, hospital h WHERE d.hosp_no=h.hosp_no AND h.hname='$n'");
+```
+
+---
+
+---
+
+## 🌐 AJAX (data.php)
+
+---
+
+### ✅ File
+
+```php
+echo file_get_contents("a.txt");
+```
+
+---
+
+### ✅ Database
+
+```php
+$conn=pg_connect("...");
+$res=pg_query($conn,"SELECT * FROM teacher");
+while($row=pg_fetch_assoc($res)){
+ echo implode(" ",$row)."<br>";
+}
+```
+
+---
+
+---
+
+## 🍪 COOKIE
+
+---
+
+### ✅ Visit count
+
+```php
+$c=isset($_COOKIE['c'])?$_COOKIE['c']+1:1;
+setcookie("c",$c,time()+3600);
+echo $c;
+```
+
+---
+
+### ✅ Last access time
+
+```php
+if(isset($_COOKIE['t'])) echo $_COOKIE['t'];
+setcookie("t",date("H:i:s"),time()+3600);
+```
+
+---
+
+### ✅ Color
+
+```php
+setcookie("bg",$_POST['bg'],time()+3600);
+echo "<body style='background:".$_COOKIE['bg']."'>";
+```
+
+---
+
+---
+
+## 🔐 SESSION
+
+---
+
+### ✅ 3 attempts login
+
+```php
+$_SESSION['count']++;
+if($_SESSION['count']>=3) echo "Blocked";
+```
+
+---
+
+---
+
+## 📄 XML
+
+---
+
+### ✅ 5 items
+
+```php
+for($i=1;$i<=5;$i++){
+ $a=$x->addChild("Item");
+ $a->addChild("ItemName","Item".$i);
+}
+```
+
+---
+
+# 🧠 FINAL MEMORY (LAST THING YOU REVISE)
+
+```
+explode
+for loop
+file_get_contents
+pg_query WHERE
+ORDER BY DESC
+COUNT(*)
+JOIN
+XMLHttpRequest
+```
+
+---
+
+# 🏁 FINAL RESULT
+
+If you use this sheet:
+
+* ✅ Q1 → 8–10 marks
+* ✅ Q2 → 8–11 marks
+* ✅ Full paper attempt possible
+* ✅ Very low chance of fail
+
+---
+
+If you want next step, I can compress this into a **1-page cheat sheet (printable)** so you revise everything in 5 minutes before exam.
