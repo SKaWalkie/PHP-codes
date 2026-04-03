@@ -7,47 +7,69 @@ Python)
 
 short and easy without skipping any line
 
-Here is a short, complete Java program (with all required lines, no skipping):
+<?php
+$filename = "student.dat";
 
-import java.io.*;
+// check if file exists
+if (file_exists($filename)) {
 
-class StudentFile {
-    public static void main(String args[]) throws Exception {
+    $file = fopen($filename, "r");
 
-        FileInputStream fin = new FileInputStream("student.dat");
-        DataInputStream din = new DataInputStream(fin);
+    echo "<table border='1'>";
+    echo "<tr>
+            <th>Roll No</th>
+            <th>Name</th>
+            <th>OS</th>
+            <th>WT</th>
+            <th>DS</th>
+            <th>Python</th>
+            <th>Percentage</th>
+          </tr>";
 
-        System.out.println("RollNo\tName\tOS\tWT\tDS\tPython\tPercentage");
+    // read file line by line
+    while (($line = fgets($file)) != false) {
 
-        try {
-            while (true) {
-                int roll = din.readInt();
-                String name = din.readUTF();
-                int os = din.readInt();
-                int wt = din.readInt();
-                int ds = din.readInt();
-                int py = din.readInt();
+        // split data
+        $data = explode(" ", trim($line));
 
-                double per = (os + wt + ds + py) / 4.0;
+        $roll = $data[0];
+        $name = $data[1];
+        $os = $data[2];
+        $wt = $data[3];
+        $ds = $data[4];
+        $py = $data[5];
 
-                System.out.println(roll + "\t" + name + "\t" + os + "\t" + wt + "\t" + ds + "\t" + py + "\t" + per);
-            }
-        } catch (EOFException e) {
-            din.close();
-        }
+        // calculate percentage
+        $total = $os + $wt + $ds + $py;
+        $per = $total / 4;
+
+        // display row
+        echo "<tr>
+                <td>$roll</td>
+                <td>$name</td>
+                <td>$os</td>
+                <td>$wt</td>
+                <td>$ds</td>
+                <td>$py</td>
+                <td>$per%</td>
+              </tr>";
     }
+
+    echo "</table>";
+
+    fclose($file);
+
+} else {
+    echo "File not found!";
 }
-Notes (important for exam):
-File must contain data in same order:
-rollno, name, OS, WT, DS, Python
+?>
 
-Uses DataInputStream to read flat file
-
-EOFException is used to stop reading
-
-Percentage = average of 4 subjects
-
-If you want, I can also give the program to create student.dat file (very useful for exams).
+student.dat
+1 Sarthak 70 80 75 85
+2 Rahul 60 65 70 75
+3 Amit 55 60 65 70
+4 Neha 80 85 90 95
+5 Priya 75 70 80 85
 
 
 Q2. Design the Item table in PostgreSQL Item (id, name, price, rating). 
