@@ -134,77 +134,58 @@ a) Display type of file.
 b) Display last modification time of file. 
 c) Display the size of file.
 
-short and easy without skipping any line
+<?php
 
-Here is a short and complete Java program (menu-driven, no lines skipped):
+echo "Enter file name: ";
+$fname = trim(fgets(STDIN));
 
-import java.io.*;
-import java.util.*;
-
-class FileOperations {
-    public static void main(String args[]) {
-
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter file name: ");
-        String fname = sc.nextLine();
-
-        File f = new File(fname);
-
-        if(!f.exists()) {
-            System.out.println("File does not exist");
-            return;
-        }
-
-        int ch;
-        do {
-            System.out.println("\n1. Display type of file");
-            System.out.println("2. Display last modification time");
-            System.out.println("3. Display file size");
-            System.out.println("4. Exit");
-            System.out.print("Enter choice: ");
-            ch = sc.nextInt();
-
-            switch(ch) {
-                case 1:
-                    if(f.isFile())
-                        System.out.println("It is a normal file");
-                    else if(f.isDirectory())
-                        System.out.println("It is a directory");
-                    break;
-
-                case 2:
-                    System.out.println("Last Modified: " + new Date(f.lastModified()));
-                    break;
-
-                case 3:
-                    System.out.println("File Size: " + f.length() + " bytes");
-                    break;
-
-                case 4:
-                    System.out.println("Exit");
-                    break;
-
-                default:
-                    System.out.println("Invalid choice");
-            }
-
-        } while(ch != 4);
-
-    }
+// check file exists
+if(!file_exists($fname)) {
+    echo "File does not exist\n";
+    exit;
 }
-Exam Points
-File class used
 
-isFile() / isDirectory() → file type
+do {
+    echo "\n1. Display type of file";
+    echo "\n2. Display last modification time";
+    echo "\n3. Display file size";
+    echo "\n4. Exit";
+    echo "\nEnter choice: ";
 
-lastModified() → time
+    $ch = trim(fgets(STDIN));
 
-length() → size
+    switch($ch) {
 
-Menu using do-while
+        case 1:
+            if(is_file($fname))
+                echo "It is a normal file\n";
+            else if(is_dir($fname))
+                echo "It is a directory\n";
+            else
+                echo "Unknown type\n";
+            break;
 
-If you want, I can convert this into a universal template for all file programs so you don’t have to memorize multiple codes.
+        case 2:
+            $time = filemtime($fname);
+            echo "Last Modified: " . date("d-m-Y H:i:s", $time) . "\n";
+            break;
+
+        case 3:
+            $size = filesize($fname);
+            echo "File Size: " . $size . " bytes\n";
+            break;
+
+        case 4:
+            echo "Exit\n";
+            break;
+
+        default:
+            echo "Invalid choice\n";
+    }
+
+} while($ch != 4);
+
+?>
 
 
 Q4. Write AJAX program to read a text file and display the contents of the file when the user 
