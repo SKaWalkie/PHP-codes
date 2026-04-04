@@ -104,9 +104,8 @@ echo $c == 1 ? "Welcome, first time" : "Visited $c times";
 
 **Q10. Reverse Order of Words (Sticky Form)**
 ```php
-<?php $s = $_POST['s'] ?? ''; ?>
-<form method="post">String: <input name="s" value="<?=$s?>"><input type="submit"></form>
-<?php if($s) echo implode(" ", array_reverse(explode(" ", $s))); ?>
+<form method="post"><input type="text" name="s"><input type="submit"></form>
+<?php if(isset($_POST['s'])) echo strrev($_POST['s']); ?>
 ```
 
 **Q11. Highest Rated Movie**
