@@ -200,3 +200,321 @@ echo "XML Created";
 
 Q25.
 <?php foreach($_SERVER as $k => $v) echo "$k : $v <br>"; ?>
+
+-------------------------------------------------------------------------------------------------Q2 STARTS FROM HERE-----------------------------------------------------------------------------------------------------------------
+
+Here are the ultra-short, exam-optimized versions of your codes. All HTML boilerplate is removed, and logic is compressed into the absolute minimum lines required for full marks.
+
+**Q1. Read flat file and calculate percentage**
+```php
+<?php
+if(file_exists('student.dat')) {
+    echo "<table border='1'><tr><th>Roll</th><th>Name</th><th>OS</th><th>WT</th><th>DS</th><th>Py</th><th>%</th></tr>";
+    foreach(file('student.dat') as $line) {
+        $d = explode(" ", trim($line));
+        echo "<tr><td>$d[0]</td><td>$d[1]</td><td>$d[2]</td><td>$d[3]</td><td>$d[4]</td><td>$d[5]</td><td>".(($d[2]+$d[3]+$d[4]+$d[5])/4)."%</td></tr>";
+    }
+    echo "</table>";
+}
+?>
+```
+
+**Q2. Item Table & Display (PostgreSQL)**
+```sql
+CREATE TABLE Item (id SERIAL PRIMARY KEY, name VARCHAR(50), price NUMERIC(10,2), rating NUMERIC(2,1));
+```
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234");
+$r = pg_query($c, "SELECT * FROM Item");
+echo "<table border=1><tr><th>ID</th><th>Name</th><th>Price</th><th>Rating</th></tr>";
+while($row = pg_fetch_assoc($r)) echo "<tr><td>{$row['id']}</td><td>{$row['name']}</td><td>{$row['price']}</td><td>{$row['rating']}</td></tr>";
+?>
+```
+
+**Q3. Menu Driven File Operations (CLI)**
+```php
+<?php
+echo "File: "; $f = trim(fgets(STDIN));
+if(file_exists($f)) do {
+    echo "\n1.Type 2.Mod Time 3.Size 4.Exit\nChoice: "; $c = trim(fgets(STDIN));
+    if($c==1) echo is_file($f) ? "File\n" : (is_dir($f) ? "Directory\n" : "Unknown\n");
+    if($c==2) echo date("d-m-Y H:i:s", filemtime($f)) . "\n";
+    if($c==3) echo filesize($f) . " bytes\n";
+} while($c != 4);
+?>
+```
+
+**Q4. AJAX Read Text File**
+```html
+<script>
+function load() { var x=new XMLHttpRequest(); x.onload=function(){ document.getElementById('d').innerHTML=this.responseText; }; x.open('GET','data.txt'); x.send(); }
+</script>
+<button onclick="load()">Display</button><div id="d"></div>
+```
+
+**Q5. Append First File to Second (CLI)**
+```php
+<?php
+echo "File 1: "; $f1 = trim(fgets(STDIN)); echo "File 2: "; $f2 = trim(fgets(STDIN));
+if(file_exists($f1)) file_put_contents($f2, file_get_contents($f1), FILE_APPEND);
+echo "Appended";
+?>
+```
+
+**Q6. Emp Salary Greater Than Input**
+```sql
+CREATE TABLE Emp (Eid SERIAL PRIMARY KEY, Ename VARCHAR(50), Salary NUMERIC(10,2));
+```
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234");
+echo "Salary: "; $s = trim(fgets(STDIN));
+$r = pg_query($c, "SELECT * FROM Emp WHERE Salary > $s");
+while($row = pg_fetch_assoc($r)) echo "{$row['eid']} \t {$row['ename']} \t {$row['salary']}\n";
+?>
+```
+
+**Q7. Sticky Form Details**
+```php
+<?php $u=$_POST['u']??''; $a=$_POST['a']??''; $e=$_POST['e']??''; ?>
+<form method="post">
+User: <input name="u" value="<?=$u?>"> Age: <input name="a" value="<?=$a?>"> Email: <input name="e" value="<?=$e?>"> <input type="submit">
+</form>
+<?php if($u) echo "Details: $u, $a, $e"; ?>
+```
+
+**Q8. XML Item + CSS**
+```xml
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/css" href="style.css"?>
+<Items>
+  <Item><ItemName>Pen</ItemName><ItemPrice>10</ItemPrice><Quantity>50</Quantity></Item>
+  </Items>
+```
+```css
+/* style.css */
+ItemName { display:block; color:red; font-family:"Copperplate Gothic Light"; font-size:16pt; font-weight:bold; }
+ItemPrice, Quantity { display:block; color:yellow; font-family:Arial; font-size:12pt; font-weight:bold; }
+```
+
+**Q9. Visit Counter using Cookies**
+```php
+<?php
+$c = ($_COOKIE['count'] ?? 0) + 1;
+setcookie('count', $c);
+echo $c == 1 ? "Welcome, first time" : "Visited $c times";
+?>
+```
+
+**Q10. Reverse Order of Words (Sticky Form)**
+```php
+<form method="post"><input type="text" name="s"><input type="submit"></form>
+<?php if(isset($_POST['s'])) echo strrev($_POST['s']); ?>
+```
+
+**Q11. Highest Rated Movie**
+```sql
+CREATE TABLE Movie (id SERIAL PRIMARY KEY, mname VARCHAR(50), release_year INT, rating NUMERIC(2,1));
+```
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234");
+$r = pg_query($c, "SELECT mname FROM Movie WHERE rating = (SELECT MAX(rating) FROM Movie)");
+while($row = pg_fetch_assoc($r)) echo $row['mname']."\n";
+?>
+```
+
+**Q12. Property by Owner Name**
+```sql
+CREATE TABLE Owner (oname VARCHAR(50) PRIMARY KEY, address VARCHAR(100), phone VARCHAR(15));
+CREATE TABLE Property (pno SERIAL PRIMARY KEY, description VARCHAR(100), area VARCHAR(50), oname VARCHAR(50) REFERENCES Owner(oname));
+```
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234");
+echo "Owner: "; $o = trim(fgets(STDIN));
+$r = pg_query($c, "SELECT * FROM Property WHERE oname = '$o'");
+while($row = pg_fetch_assoc($r)) echo "{$row['pno']} \t {$row['description']} \t {$row['area']}\n";
+?>
+```
+
+**Q13. Login Max 3 Attempts (Session)**
+```php
+<?php session_start(); $_SESSION['c'] = $_SESSION['c'] ?? 0; ?>
+<form method="post">User:<input name="u"> Pass:<input name="p"><input type="submit"></form>
+<?php
+if(isset($_POST['u'])) {
+    if($_POST['u']=='admin' && $_POST['p']=='1234') { echo "Welcome <form><input placeholder='Form 2'></form>"; session_destroy(); }
+    else if(++$_SESSION['c'] >= 3) { echo "Max attempts reached"; session_destroy(); }
+    else echo "Invalid login";
+}
+?>
+```
+
+**Q14. Last Access Time (Cookie)**
+```php
+<?php
+echo isset($_COOKIE['t']) ? "Last access time: {$_COOKIE['t']}" : "Welcome, first time";
+setcookie("t", date("d-m-Y H:i:s"));
+?>
+```
+
+**Q15. Doctors Visiting a Hospital (3NF)**
+```sql
+CREATE TABLE Hospital (hosp_no SERIAL PRIMARY KEY, hname VARCHAR(50), hcity VARCHAR(50));
+CREATE TABLE Doctor (doc_no SERIAL PRIMARY KEY, dname VARCHAR(50), address VARCHAR(100), city VARCHAR(50), area VARCHAR(50), hosp_no INT REFERENCES Hospital(hosp_no));
+```
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234"); echo "Hospital: "; $h = trim(fgets(STDIN));
+$r = pg_query($c, "SELECT d.doc_no, d.dname, d.city FROM Doctor d JOIN Hospital h ON d.hosp_no=h.hosp_no WHERE h.hname='$h'");
+while($row = pg_fetch_assoc($r)) echo "{$row['doc_no']} \t {$row['dname']} \t {$row['city']}\n";
+?>
+```
+
+**Q16. Count Employees in Dept (HTML + PHP)**
+```sql
+CREATE TABLE Dept (dno SERIAL PRIMARY KEY, dname VARCHAR(50), dlocation VARCHAR(50));
+CREATE TABLE Emp (eno SERIAL PRIMARY KEY, ename VARCHAR(50), edesignation VARCHAR(50), esalary NUMERIC, dno INT REFERENCES Dept(dno));
+```
+```php
+<form method="post"><input name="d"><input type="submit"></form>
+<?php
+if(isset($_POST['d'])){
+    $c = pg_connect("host=localhost dbname=test user=postgres password=1234");
+    $r = pg_query($c, "SELECT COUNT(*) FROM Emp e JOIN Dept d ON e.dno=d.dno WHERE d.dname='{$_POST['d']}'");
+    echo "Count: " . pg_fetch_row($r)[0];
+}
+?>
+```
+
+**Q17. AJAX Get Teacher Details**
+```html
+<script>
+function get(){ var x=new XMLHttpRequest(); x.onload=function(){ document.getElementById('d').innerHTML=this.responseText; }; x.open('GET','fetch.php'); x.send(); }
+</script>
+<button onclick="get()">Get Details</button><div id="d"></div>
+```
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234");
+$r = pg_query($c, "SELECT * FROM Teacher");
+echo "<table border=1>";
+while($row = pg_fetch_assoc($r)) echo "<tr><td>{$row['tno']}</td><td>{$row['name']}</td><td>{$row['subject']}</td><td>{$row['research_area']}</td></tr>";
+?>
+```
+
+**Q18. File Upload to Server**
+```php
+<form method="post" enctype="multipart/form-data"><input type="file" name="f"><input type="submit" name="btn"></form>
+<?php
+if(isset($_POST['btn'])){ move_uploaded_file($_FILES['f']['tmp_name'], "uploads/".$_FILES['f']['name']); echo "Uploaded"; }
+?>
+```
+
+**Q19. Route Details by Route No**
+```sql
+CREATE TABLE Route (route_no SERIAL PRIMARY KEY, source VARCHAR(50), destination VARCHAR(50), no_of_stations INT);
+```
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234"); echo "Route No: "; $rno = trim(fgets(STDIN));
+$r = pg_query($c, "SELECT * FROM Route WHERE route_no = $rno");
+while($row = pg_fetch_assoc($r)) echo "{$row['route_no']} \t {$row['source']} \t {$row['destination']} \t {$row['no_of_stations']}\n";
+?>
+```
+
+**Q20. AJAX Get Student Details**
+```html
+<script>
+function get(){ var x=new XMLHttpRequest(); x.onload=function(){ document.getElementById('d').innerHTML=this.responseText; }; x.open('GET','data.php'); x.send(); }
+</script>
+<button onclick="get()">Get Details</button><div id="d"></div>
+```
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234");
+$r = pg_query($c, "SELECT rollno, name, age FROM Student");
+echo "<table border=1>";
+while($row = pg_fetch_assoc($r)) echo "<tr><td>{$row['rollno']}</td><td>{$row['name']}</td><td>{$row['age']}</td></tr>";
+?>
+```
+
+**Q21. Apply Colors across 3 Pages (Cookies)**
+```php
+<form method="post" action="2.php">BG:<input name="b"> Text:<input name="t"><input type="submit"></form>
+
+<?php setcookie('b', $_POST['b']); setcookie('t', $_POST['t']); echo "Saved. <a href='3.php'>Go</a>"; ?>
+
+<body style="background:<?=$_COOKIE['b']?>; color:<?=$_COOKIE['t']?>;"><h2>Colored Page</h2></body>
+```
+
+**Q22. Count Doctors Visiting a Hospital**
+*(Use the same tables created in Q15)*
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234"); echo "Hospital: "; $h = trim(fgets(STDIN));
+$r = pg_query($c, "SELECT COUNT(*) FROM Doctor d JOIN Hospital h ON d.hosp_no=h.hosp_no WHERE h.hname='$h'");
+echo "Number of Doctors: " . pg_fetch_row($r)[0];
+?>
+```
+
+**Q23. Read File in Upper Case**
+```php
+<?php
+echo "File: "; $f = trim(fgets(STDIN));
+if(file_exists($f)) echo strtoupper(file_get_contents($f));
+?>
+```
+
+**Q24. Route Details by Source**
+*(Use the same Route table created in Q19)*
+```php
+<?php
+$c = pg_connect("host=localhost dbname=test user=postgres password=1234"); echo "Source: "; $s = trim(fgets(STDIN));
+$r = pg_query($c, "SELECT * FROM Route WHERE source = '$s'");
+while($row = pg_fetch_assoc($r)) echo "{$row['route_no']} \t {$row['source']} \t {$row['destination']} \t {$row['no_of_stations']}\n";
+?>
+```
+
+**Q25. Copy First File to Second**
+```php
+<?php
+echo "File 1: "; $f1 = trim(fgets(STDIN)); echo "File 2: "; $f2 = trim(fgets(STDIN));
+if(file_exists($f1)) copy($f1, $f2); echo "Copied successfully";
+?>
+```
+
+Here are the sample `.dat` and `.txt` files you need to test the file-handling programs (Q1, Q4, Q5, Q19, Q23, Q25). Just create these in the same folder as your PHP scripts.
+
+**student.dat** *(For Q1 - Space separated: Roll Name OS WT DS Python)*
+```text
+1 Sarthak 70 80 75 85
+2 Rahul 60 65 70 75
+3 Amit 55 60 65 70
+4 Neha 80 85 90 95
+5 Priya 75 70 80 85
+```
+
+**data.txt** *(For Q4 - AJAX file read)*
+```text
+This is a sample text file.
+Hello AJAX!
+```
+
+**test.txt** *(For Q19, Q23 - Read file / Uppercase)*
+```text
+Hello, this is a test file.
+We are reading this using PHP.
+```
+
+**file1.txt** *(For Q5, Q25 - Append / Copy source)*
+```text
+This is the original content from file 1.
+```
+
+**file2.txt** *(For Q5, Q25 - Append / Copy destination)*
+```text
+This is the existing content in file 2.
+```
