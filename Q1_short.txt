@@ -6,7 +6,7 @@ Q2.
 <?php session_start(); if(isset($_POST['u'])) $_SESSION['u'] = $_POST['u']; ?>
 <form method="post"><input type="text" name="u"><input type="submit"></form><a href="get.php">Get</a>
 
-<?php session_start(); echo isset($_SESSION['u']) ? $_SESSION['u'] : "No User"; ?>
+<?php session_start(); echo $_SESSION['u'] ?? "No User";
 
 Q3.
 <form method="post"><input type="number" name="n"><input type="submit"></form>
