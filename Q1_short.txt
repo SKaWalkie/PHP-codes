@@ -136,37 +136,14 @@ Q17.
 
 Q18.
 <?php
-if(isset($_POST['submit']))
-{
-    $user = $_POST['uname'];
-
-    // Set cookie for 1 hour (3600 seconds)
-    setcookie("username", $user, time() + 3600);
+if (isset($_POST['uname'])) {
+    setcookie("username", $_POST['uname'], time() + 3600);
+    echo "Cookie set for 1 hour<br>";
 }
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Set Cookie</title>
-</head>
-<body>
-
 <form method="post">
-    Enter Username:
-    <input type="text" name="uname" required>
-    <input type="submit" name="submit" value="Save">
+    Enter Username: <input name="uname" required> <input type="submit" value="Save">
 </form>
-
-<?php
-if(isset($_POST['submit']))
-{
-    echo "<br>Cookie set for 1 hour";
-}
-?>
-
-</body>
-</html>
 
 Q19.
 <?php $f="test.txt"; if(file_exists($f)){ $fp=fopen($f,"r"); echo fread($fp,filesize($f)); fclose($fp); } ?>
